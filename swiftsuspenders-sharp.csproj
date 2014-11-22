@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{45F8FEAB-D2ED-45CF-94C5-AE130F9BBDF5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>swiftsuspenderssharp</RootNamespace>
+    <AssemblyName>swiftsuspenders-sharp</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="src\" />
+    <Folder Include="src\swiftsuspenders\attribute\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\swiftsuspenders\Injector.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\DependencyProvider.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\FallbackDependencyProvider.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\ForwardingProvider.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\InjectorUsingProvider.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\LocalOnlyProvider.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\SingletonProvider.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\SoftDependencyProvider.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\TypeProvider.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\ValueProvider.cs" />
+    <Compile Include="src\swiftsuspenders\errors\InjectorException.cs" />
+    <Compile Include="src\swiftsuspenders\errors\InjectorInterfaceConstructionException.cs" />
+    <Compile Include="src\swiftsuspenders\errors\InjectorMissingMappingException.cs" />
+    <Compile Include="src\swiftsuspenders\mapping\InjectionMapping.cs" />
+    <Compile Include="src\swiftsuspenders\mapping\ProviderlessMapping.cs" />
+    <Compile Include="src\swiftsuspenders\mapping\UnsealedMapping.cs" />
+    <Compile Include="src\swiftsuspenders\reflector\Reflector.cs" />
+    <Compile Include="src\swiftsuspenders\reflector\SystemReflector.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\ConstructorInjectionPoint.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\FieldInjectionPoint.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\InjectionPoint.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\MethodInjectionPoint.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\PreDestroyInjectionPoint.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\PropertyInjectionPoint.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\TypeDescription.cs" />
+    <Compile Include="src\swiftsuspenders\utils\TypeDescriptor.cs" />
+    <Compile Include="src\swiftsuspenders\attribute\InjectAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+</Project>
