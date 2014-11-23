@@ -18,10 +18,32 @@ namespace swiftsuspenders.reflector
 		{
 //			TypeDescription description = new TypeDescription(false);
 			TypeDescription description = new TypeDescription();
-			description.ctor = new ConstructorInjectionPoint();
+//			description.ctor = new ConstructorInjectionPoint();
+			AddConstructorInjectionPoint (description, type);
 			AddPropertyInjectionPoints (description, type);
 			AddFieldInjectionPoints (description, type);
 			return description;
+		}
+
+		private void AddConstructorInjectionPoint(TypeDescription description, Type type)
+		{
+			ConstructorInfo[] constructors = type.GetConstructors();
+			ConstructorInfo constructorToInject = null;
+			int maxParameters = -1;
+			foreach (ConstructorInfo constructor in constructors)
+			{
+				object[] injections = constructor.GetCustomAttributes (_injectAttributeType, true);
+				if (injections.Length > 0) 
+				{
+					constructorToInject = constructor;
+					break;
+				}
+
+				if (constructor.GetParameters ().Length > maxParameters)
+					constructorToInject = constructor;
+			}
+
+			description.ctor = new ConstructorInjectionPoint (constructorToInject);
 		}
 
 		private void AddPropertyInjectionPoints(TypeDescription description, Type type)
@@ -57,6 +79,20 @@ namespace swiftsuspenders.reflector
 				FieldInjectionPoint injectionPoint = new FieldInjectionPoint (mappingId,
 					field, false);// injectParameters.optional == 'true', injectParameters);
 				description.AddInjectionPoint(injectionPoint);
+			}
+		}
+
+		private void AddMethodInjectionPoints(TypeDescription description, Type type)
+		{
+			MethodInfo[] methods = type.GetMethods ();
+			foreach (MethodInfo method in methods) 
+			{
+				object[] injections = method.GetCustomAttributes (_injectAttributeType, true);
+				if (injections.Length == 0)
+					continue;
+
+				MethodInjectionPoint injectionPoint = new MethodInjectionPoint (method, false);
+				description.AddInjectionPoint (injectionPoint);
 			}
 		}
 	}

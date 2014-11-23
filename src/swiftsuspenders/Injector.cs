@@ -116,7 +116,7 @@ namespace swiftsuspenders
 			{
 				throw new InjectorException("Can't unmap a sealed mapping");
 			}
-			if (mapping != null)
+			if (mapping == null)
 			{
 				throw new InjectorException("Error while removing an injector mapping: " +
 					"No mapping defined for dependency " + mappingId);

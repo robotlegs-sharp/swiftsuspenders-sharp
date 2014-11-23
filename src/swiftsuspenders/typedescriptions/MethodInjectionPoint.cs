@@ -12,12 +12,12 @@ namespace swiftsuspenders.typedescriptions
 		private MethodInfo _methodInfo;
 		private bool _optional;
 
-		public MethodInjectionPoint (object mappingId, MethodInfo methodInfo, bool optional)
+		public MethodInjectionPoint (/*object mappingId, */MethodInfo methodInfo, bool optional)
 		{
 			// method base?
 //			MethodInfo _methodInfo = null;
 //			ConstructorInfo _ctor = null;
-			_mappingId = mappingId;
+//			_mappingId = mappingId;
 			_methodInfo = methodInfo;
 			_optional = optional;
 		}
