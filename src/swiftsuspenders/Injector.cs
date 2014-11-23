@@ -101,10 +101,20 @@ namespace swiftsuspenders
 		/* Public Functions                                                           */
 		/*============================================================================*/
 
+		public InjectionMapping Map<T>(Enum key = null)
+		{
+			return Map (typeof(T), key);
+		}
+
 		public InjectionMapping Map(Type type, Enum key = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			return _mappings.ContainsKey (mappingId) ? _mappings [mappingId] : CreateMapping (type, key, mappingId); 
+		}
+
+		public void Unmap<T>(Enum key = null)
+		{
+			Unmap (typeof(T), key);
 		}
 
 		public void Unmap(Type type, Enum key = null)
@@ -128,16 +138,31 @@ namespace swiftsuspenders
 //				new MappingEvent(MappingEvent.POST_MAPPING_REMOVE, type, name, null)); //TODO: Dispatch event
 		}
 
+		public bool Satisfies<T>(Enum key = null)
+		{
+			return Satisfies (typeof(T), key);
+		}
+
 		public bool Satisfies(Type type, Enum key = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			return GetProvider(mappingId, true) != null;
 		}
 
+		public bool SatisfiesDirectly<T>(Enum key = null)
+		{
+			return SatisfiesDirectly (typeof(T), key);
+		}
+
 		public bool SatisfiesDirectly(Type type, Enum key = null)
 		{
 			return HasDirectMapping(type, key)
 				|| GetDefaultProvider(key, false) != null;
+		}
+
+		public InjectionMapping GetMapping<T>(Enum key = null)
+		{
+			return GetMapping (typeof(T), key);
 		}
 
 		public InjectionMapping GetMapping(Type type, Enum key = null)
@@ -164,6 +189,11 @@ namespace swiftsuspenders
 			ApplyInjectionPoints(target, type, _typeDescriptor.GetDescription(type));
 		}
 
+		public T GetInstance<T>(Enum key = null, Type targetType = null)
+		{
+			return (T)GetInstance (typeof(T), key, targetType);
+		}
+
 		public object GetInstance(Type type, Enum key = null, Type targetType = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
@@ -185,6 +215,11 @@ namespace swiftsuspenders
 				+ " and " + fallbackMessage);
 		}
 
+		public T GetOrCreateNewInstance<T>()
+		{
+			return (T)GetOrCreateNewInstance (typeof(T));
+		}
+
 		public object GetOrCreateNewInstance(Type type)
 		{
 			object instance = null;
@@ -193,6 +228,11 @@ namespace swiftsuspenders
 			if (instance == null)
 				instance = InstantiateUnmapped (type);
 			return instance;
+		}
+
+		public T InstantiateUnmapped<T>()
+		{
+			return (T)InstantiateUnmapped (typeof(T));
 		}
 
 		public object InstantiateUnmapped(Type type)
@@ -267,10 +307,20 @@ namespace swiftsuspenders
 			return _reflector.DescribeInjections(type);
 		}
 
+		public bool HasMapping<T>(Enum key = null)
+		{
+			return HasMapping (typeof(T), key);
+		}
+
 		public bool HasMapping(Type type, Enum key = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			return GetProvider(mappingId) != null;
+		}
+
+		public bool HasDirectMapping<T>(Enum key = null)
+		{
+			return HasDirectMapping (typeof(T), key);
 		}
 
 		public bool HasDirectMapping(Type type, Enum key = null)
@@ -278,6 +328,10 @@ namespace swiftsuspenders
 			object mappingId = key == null ? type as object : key as object;
 			return _mappings.ContainsKey(mappingId);
 		}
+
+		/*============================================================================*/
+		/* Internal Functions                                                         */
+		/*============================================================================*/
 
 		private bool CanBeInstantiated(Type type)
 		{
