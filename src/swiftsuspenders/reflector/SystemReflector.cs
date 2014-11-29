@@ -29,12 +29,16 @@ namespace swiftsuspenders.reflector
 		{
 			ConstructorInfo[] constructors = type.GetConstructors();
 			ConstructorInfo constructorToInject = null;
+			object[] keys = null;
 			int maxParameters = -1;
 			foreach (ConstructorInfo constructor in constructors)
 			{
 				object[] injections = constructor.GetCustomAttributes (_injectAttributeType, true);
 				if (injections.Length > 0) 
 				{
+					Console.WriteLine ("Injections: " + injections.Length);
+					Inject inject = injections[0] as Inject;
+					keys = inject.names;
 					constructorToInject = constructor;
 					break;
 				}
@@ -43,7 +47,7 @@ namespace swiftsuspenders.reflector
 					constructorToInject = constructor;
 			}
 
-			description.ctor = new ConstructorInjectionPoint (constructorToInject);
+			description.ctor = new ConstructorInjectionPoint (constructorToInject, keys);
 		}
 
 		private void AddPropertyInjectionPoints(TypeDescription description, Type type)

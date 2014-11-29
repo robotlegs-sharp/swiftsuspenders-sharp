@@ -56,20 +56,65 @@
  */
 
 using System;
+using System.Collections.Generic;
 
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property,
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Constructor,
 	AllowMultiple = false,
 	Inherited = true)]
 public class Inject: Attribute
 {
-	public Inject(){}
+	private object[] _names;
 
-	public Inject(object n)
+	private bool _optional;
+
+	public object[] names 
 	{
-		name = n;
+		get 
+		{
+			return _names;
+		}
 	}
 
-	public object name{get; set;}
+	public object name 
+	{
+		get 
+		{
+			if (names == null || names.Length == 0)
+				return null;
+			return names[0];
+		}
+	}
+
+	public bool optional
+	{
+		get 
+		{
+			return _optional;
+		}
+	}
+	public Inject(){}
+
+	public Inject (bool optional)
+	{
+		_optional = optional;
+	}
+
+	public Inject (bool optional, params object[] names)
+	{
+		_optional = optional;
+		_names = names;
+	}
+
+	public Inject (bool optional, Dictionary<string, object> extraParams, params object[] names)
+	{
+		_optional = optional;
+		_names = names;
+	}
+
+	public Inject(params object[] names)
+	{
+		_names = names;
+	}
 }
 
 //Tag [PostConstruct] to perform post-injection construction actions

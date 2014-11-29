@@ -9,11 +9,13 @@ namespace swiftsuspenders.typedescriptions
 	public class ConstructorInjectionPoint : InjectionPoint
 	{
 		private ConstructorInfo _constructorInfo;
+		private object[] _keys;
 		private bool _optional;
 
-		public ConstructorInjectionPoint (ConstructorInfo constructorInfo = null, bool optional = false)
+		public ConstructorInjectionPoint (ConstructorInfo constructorInfo = null, object[] keys = null, bool optional = false)
 		{
 			_constructorInfo = constructorInfo;
+			_keys = keys;
 			_optional = optional;
 		}
 
@@ -24,16 +26,11 @@ namespace swiftsuspenders.typedescriptions
 
 		public object CreateInstance(Type type, Injector injector)
 		{
-			object[] values = GatherParameterValues (type, injector);
-			if (_constructorInfo == null) {
-				int length = type.GetConstructors ().Length;
-				Console.WriteLine ("FUck");
-			}
+			object[] values = GatherParameterValues (type, injector, _keys);
 			return _constructorInfo.Invoke (values);
-//			return null;
 		}
 
-		protected virtual object[] GatherParameterValues(Type targetType, Injector injector)
+		protected virtual object[] GatherParameterValues(Type targetType, Injector injector, object[] keys = null)
 		{
 			if (_constructorInfo == null)
 				return new object[0];
@@ -43,7 +40,11 @@ namespace swiftsuspenders.typedescriptions
 			for (int i = 0; i < length; i++) 
 			{
 				Type parameterType = parameterInfos [i].ParameterType;
-				DependencyProvider provider = injector.GetProvider (parameterType);
+				object mappingId = parameterType as object;
+				if (keys != null && keys.Length > i)
+					mappingId = keys[i];
+				
+				DependencyProvider provider = injector.GetProvider (mappingId);
 				if (provider == null) 
 				{
 					if (parameterInfos [i].IsOptional || _optional) 

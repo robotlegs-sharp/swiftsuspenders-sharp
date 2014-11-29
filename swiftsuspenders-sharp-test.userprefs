@@ -1,0 +1,26 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="test\swiftsuspenders\ReflectorTests.cs">
+    <Files>
+      <File FileName="test\swiftsuspenders\ReflectorTests.cs" Line="3" Column="3" />
+      <File FileName="test\swiftsuspenders\support\injectees\OneNamedParameterConstructorInjectee.cs" Line="21" Column="21" />
+    </Files>
+    <Pads>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State expanded="True">
+          <Node name="swiftsuspenders-sharp-test" expanded="True">
+            <Node name="swiftsuspenders" expanded="True">
+              <Node name="SystemReflectorTests" expanded="True">
+                <Node name="ReflectorCorrectlyCreatesInjectionPointForOptionalPropertyInjection" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
