@@ -6,6 +6,7 @@ using swiftsuspenders.typedescriptions;
 using swiftsuspenders.support.types;
 using swiftsuspenders.support.injectees;
 using swiftsuspenders.support.enums;
+using swiftsuspenderssharptest;
 
 namespace swiftsuspenders
 {
@@ -18,13 +19,6 @@ namespace swiftsuspenders
 		{
 
 		}
-
-//		[Test]
-//		public void ReflectorReturnsNoParamsCtorInjectionPointForNoParamsCtor()
-//		{
-//			InjectionPoint injectionPoint = reflector.DescribeInjections(Clazz).ctor;
-//			Assert.True (injectionPoint is NoParamsConstructorInjectionPoint, "reflector-returned injectionPoint is no-params ctor injectionPoint");
-//		}
 
 		[Test]
 		public void ReflectorReturnsCorrectCtorInjectionPointForParamsCtor()
@@ -63,105 +57,100 @@ namespace swiftsuspenders
 		{
 			TypeDescription description = reflector.DescribeInjections(typeof(OptionalClassInjectee));
 			OptionalClassInjectee injectee = new OptionalClassInjectee();
+			Assert.NotNull (description.injectionPoints, "Reflector should have found an injection point");
 			description.injectionPoints.ApplyInjection(injectee, typeof(OptionalClassInjectee), injector);
 			Assert.Null(injectee.property, "Instance of Clazz should not have been injected for Clazz property");
 		}
 
-		/*
 		[Test]
 		public void ReflectorCorrectlyCreatesInjectionPointForOneParamMethodInjection()
 		{
-			TypeDescription description = reflector.DescribeInjections(OneParameterMethodInjectee);
+			TypeDescription description = reflector.DescribeInjections(typeof(OneParameterMethodInjectee));
 			OneParameterMethodInjectee injectee = new OneParameterMethodInjectee();
-			injector.Map(Clazz);
-			description.injectionPoints.ApplyInjection(injectee, OneParameterMethodInjectee, injector);
+			injector.Map (typeof(Clazz));
+			Assert.NotNull (description.injectionPoints, "Reflector should have found an injection point");
+			description.injectionPoints.ApplyInjection(injectee, typeof(OneParameterMethodInjectee), injector);
 			Assert.NotNull(injectee.GetDependency(), "Instance of Clazz should have been injected for Clazz dependency");
 		}
 
 		[Test]
 		public void ReflectorCorrectlyCreatesInjectionPointForOneNamedParamMethodInjection()
 		{
-			TypeDescription description = reflector.DescribeInjections(OneNamedParameterMethodInjectee);
+			TypeDescription description = reflector.DescribeInjections(typeof(OneNamedParameterMethodInjectee));
 			OneNamedParameterMethodInjectee injectee = new OneNamedParameterMethodInjectee();
-			injector.Map(Clazz, InjectEnum.NAMED_DEP);
-			description.injectionPoints.ApplyInjection(injectee, OneNamedParameterMethodInjectee, injector);
+			injector.Map(typeof(Clazz), InjectEnum.NAMED_DEP);
+			description.injectionPoints.ApplyInjection(injectee, typeof(OneNamedParameterMethodInjectee), injector);
 			Assert.NotNull(injectee.GetDependency(), "Instance of Clazz should have been injected for Clazz dependency");
 		}
 
 		[Test]
 		public void ReflectorCorrectlyCreatesInjectionPointForTwoNamedParamsMethodInjection()
 		{
-			TypeDescription description = reflector.DescribeInjections(TwoNamedParametersMethodInjectee);
+			TypeDescription description = reflector.DescribeInjections(typeof(TwoNamedParametersMethodInjectee));
 			TwoNamedParametersMethodInjectee injectee = new TwoNamedParametersMethodInjectee();
-			injector.Map(Clazz, InjectEnum.NAMED_DEP);
-			injector.Map(Interface, InjectEnum.NAMED_DEP_2).ToType(Clazz);
-			description.injectionPoints.ApplyInjection(injectee, TwoNamedParametersMethodInjectee, injector);
-			Assert.assertNotNull(injectee.GetDependency(), "Instance of Clazz should have been injected for Clazz dependency");
-			Assert.assertNotNull(injectee.GetDependency2(), "Instance of Clazz should have been injected for Interface dependency");
+			injector.Map(typeof(Clazz), InjectEnum.NAMED_DEP);
+			injector.Map(typeof(Interface), InjectEnum.NAMED_DEP_2).ToType(typeof(Clazz));
+			description.injectionPoints.ApplyInjection(injectee, typeof(TwoNamedParametersMethodInjectee), injector);
+			Assert.NotNull(injectee.GetDependency(), "Instance of Clazz should have been injected for Clazz dependency");
+			Assert.NotNull(injectee.GetDependency2(), "Instance of Clazz should have been injected for Interface dependency");
 		}
 
 		[Test]
 		public void ReflectorCorrectlyCreatesInjectionPointForOneRequiredOneOptionalParamsMethodInjection()
 		{
-			TypeDescription description = reflector.DescribeInjections(OneRequiredOneOptionalPropertyMethodInjectee);
+			TypeDescription description = reflector.DescribeInjections(typeof(OneRequiredOneOptionalPropertyMethodInjectee));
 			OneRequiredOneOptionalPropertyMethodInjectee  injectee = new OneRequiredOneOptionalPropertyMethodInjectee();
-			injector.Map(Clazz);
-			description.injectionPoints.ApplyInjection(injectee, OneRequiredOneOptionalPropertyMethodInjectee, injector);
-			Assert.assertNotNull(injectee.GetDependency(), "Instance of Clazz should have been injected for Clazz dependency");
-			Assert.assertNull(injectee.GetDependency2(), "Instance of Clazz should not have been injected for Interface dependency");
+			injector.Map(typeof(Clazz));
+			description.injectionPoints.ApplyInjection(injectee, typeof(OneRequiredOneOptionalPropertyMethodInjectee), injector);
+			Assert.NotNull(injectee.GetDependency(), "Instance of Clazz should have been injected for Clazz dependency");
+			Assert.Null(injectee.GetDependency2(), "Instance of Clazz should not have been injected for Interface dependency");
 		}
 
 		[Test]
 		public void ReflectorCorrectlyCreatesInjectionPointForOptionalOneRequiredParamMethodInjection()
 		{
-			TypeDescription description = reflector.DescribeInjections(OptionalOneRequiredParameterMethodInjectee);
+			TypeDescription description = reflector.DescribeInjections(typeof(OptionalOneRequiredParameterMethodInjectee));
 			OptionalOneRequiredParameterMethodInjectee injectee = new OptionalOneRequiredParameterMethodInjectee();
-			description.injectionPoints.ApplyInjection(injectee, OptionalOneRequiredParameterMethodInjectee, injector);
-			Assert.assertNull(injectee.GetDependency(), "Instance of Clazz should not have been injected for Clazz dependency");
+			description.injectionPoints.ApplyInjection(injectee, typeof(OptionalOneRequiredParameterMethodInjectee), injector);
+			Assert.Null(injectee.GetDependency(), "Instance of Interface should not have been injected for Interface dependency");
 		}
 
 		[Test]
 		public void ReflectorCreatesInjectionPointsForPostConstructMethods()
 		{
-			InjectionPoint first = reflector.DescribeInjections(OrderedPostConstructInjectee).injectionPoints;
-			Assert.assertTrue(first && first.next && first.next.next && first.next.next.next, "Four injection points have been added");
+			InjectionPoint first = reflector.DescribeInjections(typeof(OrderedPostConstructInjectee)).injectionPoints;
+			Assert.True(first != null && first.next != null  && first.next.next != null  && first.next.next.next != null , "Four injection points have been added");
 		}
 
 		[Test]
 		public void ReflectorCorrectlySortsInjectionPointsForPostConstructMethods()
 		{
-			InjectionPoint first = reflector.DescribeInjections(OrderedPostConstructInjectee).injectionPoints;
-			Assert.assertEquals('First injection point has order "1"', 1,
-				PostConstructInjectionPoint(first).order);
-			Assert.assertEquals('Second injection point has order "2"', 2,
-				PostConstructInjectionPoint(first.next).order);
-			Assert.assertEquals('Third injection point has order "3"', 3,
-				PostConstructInjectionPoint(first.next.next).order);
-			Assert.assertEquals('Fourth injection point has no order "int.MAX_VALUE"', int.MAX_VALUE,
-				PostConstructInjectionPoint(first.next.next.next).order);
+			InjectionPoint first = reflector.DescribeInjections(typeof(OrderedPostConstructInjectee)).injectionPoints;
+			Assert.AreEqual(1, (first as PostConstructInjectionPoint).order, "First injection point has order '1'");
+			Assert.AreEqual(2, (first.next as PostConstructInjectionPoint).order, "Second injection point has order '2'");
+			Assert.AreEqual(3, (first.next.next as PostConstructInjectionPoint).order, "Third injection point has order '3'");
+			Assert.AreEqual(int.MaxValue, (first.next.next.next as PostConstructInjectionPoint).order, "Fourth injection point has no order 'int.MaxValue'");
 		}
 
 		[Test]
 		public void ReflectorCreatesInjectionPointsForPreDestroyMethods()
 		{
-			InjectionPoint first = reflector.DescribeInjections(OrderedPreDestroyInjectee).preDestroyMethods;
-			Assert.True(first && first.next && first.next.next && first.next.next.next, "Four injection points have been added");
+			InjectionPoint first = reflector.DescribeInjections(typeof(OrderedPreDestroyInjectee)).preDestroyMethods;
+			Assert.True(first != null && first.next != null  && first.next.next != null  && first.next.next.next != null , "Four injection points have been added");
 		}
 
 		[Test]
 		public void ReflectorCorrectlySortsInjectionPointsForPreDestroyMethods()
 		{
-			InjectionPoint first = reflector.DescribeInjections(OrderedPreDestroyInjectee).preDestroyMethods;
-			Assert.assertEquals('First injection point has order "1"', 1,
-				PreDestroyInjectionPoint(first).order);
-			Assert.assertEquals('Second injection point has order "2"', 2,
-				PreDestroyInjectionPoint(first.next).order);
-			Assert.assertEquals('Third injection point has order "3"', 3,
-				PreDestroyInjectionPoint(first.next.next).order);
-			Assert.assertEquals('Fourth injection point has no order "int.MAX_VALUE"', int.MAX_VALUE,
-				PreDestroyInjectionPoint(first.next.next.next).order);
+			InjectionPoint first = reflector.DescribeInjections(typeof(OrderedPreDestroyInjectee)).preDestroyMethods;
+			Assert.AreEqual(1, (first as PreDestroyInjectionPoint).order, "First injection point has order '1'");
+			Assert.AreEqual(2, (first.next as PreDestroyInjectionPoint).order, "Second injection point has order '2'");
+			Assert.AreEqual(3, (first.next.next as PreDestroyInjectionPoint).order, "Third injection point has order '3'");
+			Assert.AreEqual(int.MaxValue, (first.next.next.next as PreDestroyInjectionPoint).order, "Fourth injection point has no order 'int.MaxValue'");
 		}
 
+		// Hmm, not sure if I want/can implement these features easily
+		/*
 		[Test]
 		public void ReflectorStoresUnknownInjectParameters()
 		{

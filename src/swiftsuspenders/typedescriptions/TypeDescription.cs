@@ -27,6 +27,20 @@ namespace swiftsuspenders.typedescriptions
 				injectionPoints.last = injectionPoint;
 			}
 		}
+
+		public void AddPreDestroyMethod(PreDestroyInjectionPoint preDestroyMethod)
+		{
+			if (preDestroyMethods != null)
+			{
+				preDestroyMethods.last.next = preDestroyMethod;
+				preDestroyMethods.last = preDestroyMethod;
+			}
+			else
+			{
+				preDestroyMethods = preDestroyMethod;
+				preDestroyMethods.last = preDestroyMethod;
+			}
+		}
 	}
 }
 

@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Reflection;
 
 namespace swiftsuspenders.typedescriptions
 {
-	public class PreDestroyInjectionPoint : InjectionPoint
+	public class PreDestroyInjectionPoint : OrderedInjectionPoint
 	{
-		public PreDestroyInjectionPoint ()
+		public PreDestroyInjectionPoint (int order, MethodInfo methodInfo) : base(order, methodInfo)
 		{
+
 		}
 	}
 }

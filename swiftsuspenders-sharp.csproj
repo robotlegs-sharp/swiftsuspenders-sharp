@@ -64,6 +64,12 @@
     <Compile Include="src\swiftsuspenders\typedescriptions\TypeDescription.cs" />
     <Compile Include="src\swiftsuspenders\utils\TypeDescriptor.cs" />
     <Compile Include="src\swiftsuspenders\attribute\InjectAttribute.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\MethodBaseInjectionPoint.cs" />
+    <Compile Include="src\swiftsuspenders\attribute\PostConstructAttribute.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\PostConstructInjectionPoint.cs" />
+    <Compile Include="src\swiftsuspenders\typedescriptions\OrderedInjectionPoint.cs" />
+    <Compile Include="src\swiftsuspenders\attribute\OrderedAttribute.cs" />
+    <Compile Include="src\swiftsuspenders\attribute\PreDestroy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

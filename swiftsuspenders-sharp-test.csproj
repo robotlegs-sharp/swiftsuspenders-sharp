@@ -53,6 +53,14 @@
     <Compile Include="test\swiftsuspenders\support\types\Clazz.cs" />
     <Compile Include="test\swiftsuspenders\support\types\Interface.cs" />
     <Compile Include="test\swiftsuspenders\support\types\Interface2.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\OneParameterMethodInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\OneNamedParameterMethodInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\TwoNamedParameterMethodInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\OneRequiredOneOptionalPropertyMethodInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\OptionalOneRequiredParameterMethodInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\OrderedPostConstructInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\OrderedPreDestroyInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\InjectionMappingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="swiftsuspenders-sharp.csproj">

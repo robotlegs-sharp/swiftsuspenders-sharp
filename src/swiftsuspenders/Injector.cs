@@ -435,5 +435,10 @@ namespace swiftsuspenders
 //			hasEventListener(InjectionEvent.POST_CONSTRUCT) && dispatchEvent(
 //				new InjectionEvent(InjectionEvent.POST_CONSTRUCT, target, targetType)); //TODO@ Implement events
 		}
+
+		public static void PurgeInjectionPointsCache()
+		{
+			INJECTION_POINTS_CACHE.Clear ();
+		}
 	}
 }
