@@ -1,9 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="test\swiftsuspenders\ReflectorTests.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="src\swiftsuspenders\reflector\SystemReflector.cs">
     <Files>
-      <File FileName="test\swiftsuspenders\ReflectorTests.cs" Line="3" Column="3" />
-      <File FileName="test\swiftsuspenders\support\injectees\OneNamedParameterConstructorInjectee.cs" Line="21" Column="21" />
+      <File FileName="test\swiftsuspenders\ReflectorTests.cs" Line="51" Column="51" />
+      <File FileName="test\swiftsuspenders\support\injectees\OneNamedParameterConstructorInjectee.cs" Line="1" Column="1" />
+      <File FileName="test\swiftsuspenders\support\injectees\OptionalClassInjectee.cs" Line="2" Column="2" />
+      <File FileName="test\swiftsuspenders\SystemReflectorTests.cs" Line="30" Column="30" />
+      <File FileName="src\swiftsuspenders\reflector\SystemReflector.cs" Line="43" Column="43" />
     </Files>
     <Pads>
       <Pad Id="MonoDevelop.NUnit.TestPad">

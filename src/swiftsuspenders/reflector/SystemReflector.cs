@@ -62,8 +62,7 @@ namespace swiftsuspenders.reflector
 				Inject attr = injections [0] as Inject;
 				object key = attr.name;
 				object mappingId = key == null ? property.PropertyType as object : key as object;
-				PropertyInjectionPoint injectionPoint = new PropertyInjectionPoint(mappingId,
-					property, false);// injectParameters.optional == 'true', injectParameters);
+				PropertyInjectionPoint injectionPoint = new PropertyInjectionPoint (mappingId, property, attr.optional); //injectParameters);
 				description.AddInjectionPoint(injectionPoint);
 			}
 		}
@@ -81,7 +80,7 @@ namespace swiftsuspenders.reflector
 				object key = attr.name;
 				object mappingId = key == null ? field.FieldType as object : key as object;
 				FieldInjectionPoint injectionPoint = new FieldInjectionPoint (mappingId,
-					field, false);// injectParameters.optional == 'true', injectParameters);
+					field, attr.optional);// injectParameters.optional == 'true', injectParameters);
 				description.AddInjectionPoint(injectionPoint);
 			}
 		}
@@ -95,7 +94,9 @@ namespace swiftsuspenders.reflector
 				if (injections.Length == 0)
 					continue;
 
-				MethodInjectionPoint injectionPoint = new MethodInjectionPoint (method, false);
+				Inject attr = injections [0] as Inject;
+
+				MethodInjectionPoint injectionPoint = new MethodInjectionPoint (method, attr.optional);
 				description.AddInjectionPoint (injectionPoint);
 			}
 		}
