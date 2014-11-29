@@ -38,7 +38,7 @@ namespace swiftsuspenders.typedescriptions
 			{
 				Type parameterType = parameterInfos [i].ParameterType;
 				object mappingId = parameterType as object;
-				if (_keys != null && _keys.Length > i)
+				if (_keys != null && _keys.Length > i && _keys[i] != null)
 					mappingId = _keys[i];
 
 				DependencyProvider provider = injector.GetProvider (mappingId);

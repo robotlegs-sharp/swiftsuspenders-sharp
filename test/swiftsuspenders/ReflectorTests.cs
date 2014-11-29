@@ -15,11 +15,6 @@ namespace swiftsuspenders
 		protected Reflector reflector;
 		protected Injector injector;
 
-		public ReflectorTests ()
-		{
-
-		}
-
 		[Test]
 		public void ReflectorReturnsCorrectCtorInjectionPointForParamsCtor()
 		{

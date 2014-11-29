@@ -61,6 +61,25 @@
     <Compile Include="test\swiftsuspenders\support\injectees\OrderedPostConstructInjectee.cs" />
     <Compile Include="test\swiftsuspenders\support\injectees\OrderedPreDestroyInjectee.cs" />
     <Compile Include="test\swiftsuspenders\InjectionMappingTests.cs" />
+    <Compile Include="test\swiftsuspenders\InjectorTests.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\ClassInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\NamedClassInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\StringInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\RecursiveInterfaceInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\MultipleSingletonsOfSameClassInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\ComplexClassInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\types\ComplexClazz.cs" />
+    <Compile Include="test\swiftsuspenders\support\types\ComplexInterface.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\SetterInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\types\Clazz2.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\TwoNamedInterfaceFieldsInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\TwoParametersMethodInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\MixedParametersMethodInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\MixedParametersConstructorInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\TwoNamedParametersConstructorInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\TwoParametersConstructorInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\TwoParametersConstructorInjecteeWithConstructorInjectedDependencies.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\NamedStringArrayInjectee.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="swiftsuspenders-sharp.csproj">

@@ -101,23 +101,23 @@ namespace swiftsuspenders
 		/* Public Functions                                                           */
 		/*============================================================================*/
 
-		public InjectionMapping Map<T>(Enum key = null)
+		public InjectionMapping Map<T>(object key = null)
 		{
 			return Map (typeof(T), key);
 		}
 
-		public InjectionMapping Map(Type type, Enum key = null)
+		public InjectionMapping Map(Type type, object key = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			return _mappings.ContainsKey (mappingId) ? _mappings [mappingId] : CreateMapping (type, key, mappingId); 
 		}
 
-		public void Unmap<T>(Enum key = null)
+		public void Unmap<T>(object key = null)
 		{
 			Unmap (typeof(T), key);
 		}
 
-		public void Unmap(Type type, Enum key = null)
+		public void Unmap(Type type, object key = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			InjectionMapping mapping;
@@ -138,34 +138,34 @@ namespace swiftsuspenders
 //				new MappingEvent(MappingEvent.POST_MAPPING_REMOVE, type, name, null)); //TODO: Dispatch event
 		}
 
-		public bool Satisfies<T>(Enum key = null)
+		public bool Satisfies<T>(object key = null)
 		{
 			return Satisfies (typeof(T), key);
 		}
 
-		public bool Satisfies(Type type, Enum key = null)
+		public bool Satisfies(Type type, object key = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			return GetProvider(mappingId, true) != null;
 		}
 
-		public bool SatisfiesDirectly<T>(Enum key = null)
+		public bool SatisfiesDirectly<T>(object key = null)
 		{
 			return SatisfiesDirectly (typeof(T), key);
 		}
 
-		public bool SatisfiesDirectly(Type type, Enum key = null)
+		public bool SatisfiesDirectly(Type type, object key = null)
 		{
 			return HasDirectMapping(type, key)
 				|| GetDefaultProvider(key, false) != null;
 		}
 
-		public InjectionMapping GetMapping<T>(Enum key = null)
+		public InjectionMapping GetMapping<T>(object key = null)
 		{
 			return GetMapping (typeof(T), key);
 		}
 
-		public InjectionMapping GetMapping(Type type, Enum key = null)
+		public InjectionMapping GetMapping(Type type, object key = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			InjectionMapping mapping;
@@ -189,12 +189,12 @@ namespace swiftsuspenders
 			ApplyInjectionPoints(target, type, _typeDescriptor.GetDescription(type));
 		}
 
-		public T GetInstance<T>(Enum key = null, Type targetType = null)
+		public T GetInstance<T>(object key = null, Type targetType = null)
 		{
 			return (T)GetInstance (typeof(T), key, targetType);
 		}
 
-		public object GetInstance(Type type, Enum key = null, Type targetType = null)
+		public object GetInstance(Type type, object key = null, Type targetType = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			DependencyProvider provider = GetProvider (mappingId);
@@ -307,23 +307,23 @@ namespace swiftsuspenders
 			return _reflector.DescribeInjections(type);
 		}
 
-		public bool HasMapping<T>(Enum key = null)
+		public bool HasMapping<T>(object key = null)
 		{
 			return HasMapping (typeof(T), key);
 		}
 
-		public bool HasMapping(Type type, Enum key = null)
+		public bool HasMapping(Type type, object key = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			return GetProvider(mappingId) != null;
 		}
 
-		public bool HasDirectMapping<T>(Enum key = null)
+		public bool HasDirectMapping<T>(object key = null)
 		{
 			return HasDirectMapping (typeof(T), key);
 		}
 
-		public bool HasDirectMapping(Type type, Enum key = null)
+		public bool HasDirectMapping(Type type, object key = null)
 		{
 			object mappingId = key == null ? type as object : key as object;
 			return _mappings.ContainsKey(mappingId);
@@ -396,7 +396,7 @@ namespace swiftsuspenders
 		/* Private Functions                                                          */
 		/*============================================================================*/
 
-		private InjectionMapping CreateMapping(Type type, Enum key, object mappingId)
+		private InjectionMapping CreateMapping(Type type, object key, object mappingId)
 		{
 			if (_mappingsInProcess.ContainsKey (mappingId))
 				throw new InjectorException ("Can't change a mapping from inside a listener to it's creation event");

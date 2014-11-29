@@ -24,7 +24,7 @@ namespace swiftsuspenders.mapping
 		/*============================================================================*/
 
 		private Type _type;
-		private Enum _key;
+		private object _key;
 		private object _mappingId;
 		private Injector _creatingInjector;
 		private bool _defaultProviderSet = false;
@@ -38,7 +38,7 @@ namespace swiftsuspenders.mapping
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
-		public InjectionMapping(Injector injector, Type type, Enum key, object mappingId)
+		public InjectionMapping(Injector injector, Type type, object key, object mappingId)
 		{
 			_creatingInjector = injector;
 			_type = type;
@@ -105,7 +105,7 @@ namespace swiftsuspenders.mapping
 			return this;
 		}
 
-		public UnsealedMapping ToProviderOf(Type type, Enum key = null)
+		public UnsealedMapping ToProviderOf(Type type, object key = null)
 		{
 			DependencyProvider provider = _creatingInjector.GetMapping(type, key).GetProvider();
 			ToProvider(provider);
