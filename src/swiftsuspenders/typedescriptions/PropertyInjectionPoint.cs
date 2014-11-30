@@ -32,7 +32,7 @@ namespace swiftsuspenders.typedescriptions
 					targetType.FullName +
 					"'. Target dependency: '" + _mappingId + "'");
 			}
-			_propertyInfo.SetValue (target, provider.Apply (_propertyInfo.PropertyType, injector, injectParameters), null); //TODO: Research indexed properties
+			_propertyInfo.SetValue (target, provider.Apply (targetType, injector, injectParameters), null); //TODO: Research indexed properties
 		}
 	}
 }

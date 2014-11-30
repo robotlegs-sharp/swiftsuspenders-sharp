@@ -30,7 +30,7 @@ namespace swiftsuspenders.typedescriptions
 					targetType.FullName +
 					"'. Target dependency: '" + _mappingId + "'");
 			}
-			_fieldInfo.SetValue (target, provider.Apply (_fieldInfo.FieldType, injector, injectParameters));
+			_fieldInfo.SetValue (target, provider.Apply (targetType, injector, injectParameters));
 		}
 	}
 }

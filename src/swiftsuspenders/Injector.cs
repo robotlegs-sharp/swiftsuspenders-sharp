@@ -455,6 +455,7 @@ namespace swiftsuspenders
 			}
 			if (description.preDestroyMethods != null)
 			{
+				Console.WriteLine ("Adding to pre-destroy methods: " + targetType);
 				_managedObjects[target] = target;
 			}
 //			hasEventListener(InjectionEvent.POST_CONSTRUCT) && dispatchEvent(
