@@ -23,7 +23,33 @@ namespace swiftsuspenders
 //				{
 //					return getQualifiedClassName(type) + '|';
 //				});
-//		}
+		//		}
+
+		/*============================================================================*/
+		/* Events and Delegates                                                       */
+		/*============================================================================*/
+
+		public event MappingDelegate PRE_MAPPING_CREATE;
+
+		public event MappingDelegate POST_MAPPING_CREATE;
+
+		public event MappingDelegate PRE_MAPPING_CHANGE;
+
+		public event MappingDelegate POST_MAPPING_CHANGE;
+
+		public event MappingDelegate POST_MAPPING_REMOVE;
+
+		public event MappingDelegate MAPPING_OVERRIDE;
+
+		public delegate void MappingDelegate(Type mappedType, string mappedName, InjectionMapping instanceType);
+
+		public event InjectionDelegate POST_INSTANTIATE;
+
+		public event InjectionDelegate PRE_CONSTRUCT;
+
+		public event InjectionDelegate POST_CONSTRUCT;
+
+		public delegate void InjectionDelegate(object instance, Type instanceType);
 
 		/*============================================================================*/
 		/* Public Properties                                                          */
@@ -271,15 +297,14 @@ namespace swiftsuspenders
 				mapping.GetProvider().Destroy();
 			}
 			List<object> objectsToRemove = new List<object>();
-			foreach (object instance in _managedObjects)
+			foreach (KeyValuePair<object,object> managedObject in _managedObjects) 
 			{
-				if (instance != null)
-					objectsToRemove.Add(instance);
+				objectsToRemove.Add(managedObject.Key);
 			}
-			while(objectsToRemove.Count != 0)
+			while (objectsToRemove.Count > 0) 
 			{
-				DestroyInstance(objectsToRemove[0]);
-				objectsToRemove.RemoveAt(0);
+				DestroyInstance (objectsToRemove[0]);
+				objectsToRemove.RemoveAt (0);
 			}
 			providerMappings.Clear ();
 			_mappings.Clear();

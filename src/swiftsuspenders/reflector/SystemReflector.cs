@@ -2,6 +2,7 @@
 using swiftsuspenders.typedescriptions;
 using System.Reflection;
 using System.Collections.Generic;
+using swiftsuspenders.errors;
 
 namespace swiftsuspenders.reflector
 {
@@ -46,8 +47,8 @@ namespace swiftsuspenders.reflector
 				if (constructor.GetParameters ().Length > maxParameters)
 					constructorToInject = constructor;
 			}
-
-			description.ctor = new ConstructorInjectionPoint (constructorToInject, keys);
+			if (constructorToInject != null)
+				description.ctor = new ConstructorInjectionPoint (constructorToInject, keys);
 		}
 
 		private void AddPropertyInjectionPoints(TypeDescription description, Type type)

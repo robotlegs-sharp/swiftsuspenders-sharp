@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="test\" />
+    <Folder Include="test\swiftsuspenders\support\providers\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="test\swiftsuspenders\ReflectorTests.cs" />
@@ -80,6 +81,12 @@
     <Compile Include="test\swiftsuspenders\support\injectees\TwoParametersConstructorInjectee.cs" />
     <Compile Include="test\swiftsuspenders\support\injectees\TwoParametersConstructorInjecteeWithConstructorInjectedDependencies.cs" />
     <Compile Include="test\swiftsuspenders\support\injectees\NamedStringArrayInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\PostConstructWithArgInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\providers\ClassNameStoringProvider.cs" />
+    <Compile Include="test\swiftsuspenders\support\providers\MoodyProvider.cs" />
+    <Compile Include="test\swiftsuspenders\support\providers\ProviderThatCanDoInterfaces.cs" />
+    <Compile Include="test\swiftsuspenders\support\providers\UnknownParametersUsingProvider.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\MultipleNamedSingletonsOfSameClassInjectee.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="swiftsuspenders-sharp.csproj">

@@ -4,7 +4,6 @@ using swiftsuspenders.support.enums;
 
 namespace swiftsuspenders.support.injectees
 {
-	//[Inject(InjectEnum.NAMED_DEPENDENCY)]
 	public class OneNamedParameterConstructorInjectee
 	{
 		private Clazz m_dependency;

@@ -6,7 +6,6 @@ using swiftsuspenders.typedescriptions;
 using swiftsuspenders.support.types;
 using swiftsuspenders.support.injectees;
 using swiftsuspenders.support.enums;
-using swiftsuspenderssharptest;
 
 namespace swiftsuspenders
 {

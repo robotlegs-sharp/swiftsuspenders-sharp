@@ -16,7 +16,7 @@ namespace swiftsuspenders.support.injectees
 			m_dependency2 = dependency2;
 		}
 
-		public OneParameterConstructorInjectee GetDependency()
+		public OneParameterConstructorInjectee GetDependency1()
 		{
 			return m_dependency1;
 		}

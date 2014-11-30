@@ -70,6 +70,7 @@
     <Compile Include="src\swiftsuspenders\typedescriptions\OrderedInjectionPoint.cs" />
     <Compile Include="src\swiftsuspenders\attribute\OrderedAttribute.cs" />
     <Compile Include="src\swiftsuspenders\attribute\PreDestroy.cs" />
+    <Compile Include="src\swiftsuspenders\dependencyproviders\OtherMappingProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

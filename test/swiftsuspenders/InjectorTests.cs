@@ -3,6 +3,11 @@ using NUnit.Framework;
 using swiftsuspenders.support.injectees;
 using swiftsuspenders.support.types;
 using swiftsuspenders.support.enums;
+using swiftsuspenders.errors;
+using swiftsuspenders.support.providers;
+using swiftsuspenders.typedescriptions;
+using swiftsuspenders.mapping;
+using swiftsuspenders.dependencyproviders;
 
 namespace swiftsuspenders
 {
@@ -342,18 +347,6 @@ namespace swiftsuspenders
 			Assert.AreEqual(ac, injectee.ac, "Instance field 'ac' should be identical to local variable 'ac'");
 		}
 
-		/*
-		[Test]
-		public void inject_xml_value()
-		{
-			var injectee : XMLInjectee = new XMLInjectee();
-			var value : XML = <test/>;
-			injector.Map(XML).ToValue(value);
-			injector.InjectInto(injectee);
-			Assert.AreEqual('injected value should be indentical to mapped value',
-				injectee.property, value);
-		}
-		
 		[Test, ExpectedException(typeof(InjectorMissingMappingException))]
 		public void halt_on_missing_interface_dependency()
 		{
@@ -363,31 +356,31 @@ namespace swiftsuspenders
 		[Test]
 		public void use_fallbackProvider_for_unmapped_dependency_if_given()
 		{
-			injector.fallbackProvider = new ProviderThatCanDoInterfaces(Clazz);
-			const injectee : ClassInjectee = new ClassInjectee();
+			injector.fallbackProvider = new ProviderThatCanDoInterfaces(typeof(Clazz));
+			ClassInjectee injectee = new ClassInjectee();
 			injector.InjectInto(injectee);
-			assertThat(injectee.property, isA(Clazz));
+			Assert.IsInstanceOf<Clazz>(injectee.property);
 		}
 		
 		[Test, ExpectedException(typeof(InjectorMissingMappingException))]
 		public void halt_on_missing_class_dependency_without_fallbackProvider()
 		{
-			const injectee : ClassInjectee = new ClassInjectee();
+			ClassInjectee injectee = new ClassInjectee();
 			injector.InjectInto(injectee);
 		}
 		
 		[Test, ExpectedException(typeof(InjectorMissingMappingException))]
 		public void halt_on_missing_named_dependency()
 		{
-			var injectee:NamedClassInjectee = new NamedClassInjectee();
+			NamedClassInjectee injectee = new NamedClassInjectee();
 			injector.InjectInto(injectee);
 		}
 		
 		[Test]
 		public void postConstruct_method_is_called()
 		{
-			var injectee:ClassInjectee = new ClassInjectee();
-			var value:Clazz = new Clazz();
+			ClassInjectee injectee = new ClassInjectee();
+			Clazz value = new Clazz();
 			injector.Map(typeof(Clazz)).ToValue(value);
 			injector.InjectInto(injectee);
 				
@@ -398,170 +391,170 @@ namespace swiftsuspenders
 		public void postConstruct_method_with_arg_is_called_correctly()
 		{
 			injector.Map(typeof(Clazz));
-			var injectee:PostConstructWithArgInjectee =
-				injector.InstantiateUnmapped(PostConstructWithArgInjectee);
-			assertThat(injectee.property, isA(Clazz));
+			PostConstructWithArgInjectee injectee =
+				injector.InstantiateUnmapped(typeof(PostConstructWithArgInjectee)) as PostConstructWithArgInjectee;
+			Assert.IsInstanceOf<Clazz>(injectee.property);
 		}
 
 		[Test]
 		public void postConstruct_methods_called_as_ordered()
 		{
-			var injectee:OrderedPostConstructInjectee = new OrderedPostConstructInjectee();
+			OrderedPostConstructInjectee injectee = new OrderedPostConstructInjectee();
 			injector.InjectInto(injectee);
 
-			assertThat(injectee.loadOrder, array(1,2,3,4));
+			Assert.AreEqual(injectee.loadOrder, new int[]{1,2,3,4});
 		}
 
 		[Test]
 		public void satisfies_is_false_for_unmapped_unnamed_interface()
 		{
-			Assert.False(injector.satisfies(Interface));
+			Assert.False(injector.Satisfies(typeof(Interface)));
 		}
 
 		[Test]
 		public void satisfies_is_false_for_unmapped_unnamed_class()
 		{
-			Assert.False(injector.satisfies(Clazz));
+			Assert.False(injector.Satisfies(typeof(Clazz)));
 		}
 
 		[Test]
 		public void satisfies_is_false_for_unmapped_named_class()
 		{
-			Assert.False(injector.satisfies(Clazz, 'namedClass'));
+			Assert.False(injector.Satisfies(typeof(Clazz), "namedClass"));
 		}
 
 		[Test]
 		public void satisfies_is_true_for_mapped_unnamed_class()
 		{
 			injector.Map(typeof(Clazz)).ToType(typeof(Clazz));
-			Assert.True(injector.satisfies(Clazz));
+			Assert.True(injector.Satisfies(typeof(Clazz)));
 		}
 
 		[Test]
 		public void satisfies_is_true_for_mapped_named_class()
 		{
-			injector.Map(typeof(Clazz), 'namedClass').ToType(typeof(Clazz));
-			Assert.True(injector.satisfies(Clazz, 'namedClass'));
+			injector.Map(typeof(Clazz), "namedClass").ToType(typeof(Clazz));
+			Assert.True(injector.Satisfies(typeof(Clazz), "namedClass"));
 		}
 
 		[Test, ExpectedException(typeof(InjectorMissingMappingException))]
 		public void get_instance_errors_for_unmapped_class()
 		{
-			injector.getInstance(Clazz);
+			injector.GetInstance(typeof(Clazz));
 		}
 		
 		[Test]
 		public void instantiateUnmapped_works_for_unmapped_class()
 		{
-			assertThat(injector.InstantiateUnmapped(Clazz), instanceOf(Clazz));
+			Assert.IsInstanceOf<Clazz>(injector.InstantiateUnmapped(typeof(Clazz)));
 		}
 
 		[Test, ExpectedException(typeof(InjectorMissingMappingException))]
 		public void get_instance_errors_for_unmapped_named_class()
 		{
-			injector.getInstance(Clazz, 'namedClass');
+			injector.GetInstance(typeof(Clazz), "namedClass");
 		}
 
 		[Test]
 		public void getInstance_returns_mapped_value_for_mapped_unnamed_class()
 		{
-			var clazz : Clazz = new Clazz();
+			Clazz clazz = new Clazz();
 			injector.Map(typeof(Clazz)).ToValue(clazz);
-			Assert.assertObjectEquals(injector.getInstance(Clazz), clazz);
+			Assert.AreEqual(injector.GetInstance(typeof(Clazz)), clazz);
 		}
 
 		[Test]
 		public void getInstance_returns_mapped_value_for_mapped_named_class()
 		{
-			var clazz : Clazz = new Clazz();
-			injector.Map(typeof(Clazz), 'namedClass').ToValue(clazz);
-			Assert.assertObjectEquals(injector.getInstance(Clazz, 'namedClass'), clazz);
+			Clazz clazz = new Clazz();
+			injector.Map(typeof(Clazz), "namedClass").ToValue(clazz);
+			Assert.AreEqual(injector.GetInstance(typeof(Clazz), "namedClass"), clazz);
 		}
 
 		[Test]
 		public void unmapping_singleton_instance_removes_the_singleton()
 		{
 			injector.Map(typeof(Clazz)).ToSingleton(typeof(Clazz));
-			var injectee1 : ClassInjectee = injector.InstantiateUnmapped(ClassInjectee);
-			injector.unmap(Clazz);
+			ClassInjectee injectee1 = injector.InstantiateUnmapped<ClassInjectee>();
+			injector.Unmap(typeof(Clazz));
 			injector.Map(typeof(Clazz)).ToSingleton(typeof(Clazz));
-			var injectee2 : ClassInjectee = injector.InstantiateUnmapped(ClassInjectee);
-			Assert.False('injectee1.property is not the same instance as injectee2.property',
-				injectee1.property == injectee2.property);
+			ClassInjectee injectee2 = injector.InstantiateUnmapped<ClassInjectee>();
+			Assert.False(injectee1.property == injectee2.property, "injectee1.property is not the same instance as injectee2.property");
 		}
-		
-		[Test(expects="org.swiftsuspenders.errors.InjectorInterfaceConstructionError")]
+
+		[Test, ExpectedException(typeof(InjectorInterfaceConstructionException))]
 		public void instantiateUnmapped_on_interface_throws_InjectorInterfaceConstructionError()
 		{
-			injector.fallbackProvider = new ProviderThatCanDoInterfaces(Clazz);
-			injector.InstantiateUnmapped(Interface);
+			injector.fallbackProvider = new ProviderThatCanDoInterfaces(typeof(Clazz));
+			injector.InstantiateUnmapped(typeof(Interface));
 		}
 
 		[Test, ExpectedException(typeof(InjectorMissingMappingException))]
 		public void getInstance_on_unmapped_interface_with_no_fallback_throws_InjectorMissingMappingError()
 		{
-			injector.getInstance(Interface);
+			injector.GetInstance(typeof(Interface));
 		}
 		
 		[Test, ExpectedException(typeof(InjectorMissingMappingException))]
 		public void getInstance_on_unmapped_class_with_fallback_provider_that_doesnt_satisfy_throws_InjectorMissingMappingError()
 		{
 			injector.fallbackProvider = new MoodyProvider(false);
-			injector.getInstance(Clazz)
+			injector.GetInstance (typeof(Clazz));
 		}
 
 		[Test]
 		public void instantiateUnmapped_doesnt_throw_when_attempting_unmapped_optional_property_injection()
 		{
-			var injectee : OptionalClassInjectee = injector.InstantiateUnmapped(OptionalClassInjectee);
-			Assert.assertNull("injectee mustn\'t contain Clazz instance", injectee.property);
+			OptionalClassInjectee injectee = injector.InstantiateUnmapped<OptionalClassInjectee>();
+			Assert.Null(injectee.property, "injectee mustn't contain Clazz instance");
 		}
 
 		[Test]
 		public void getInstance_doesnt_throw_when_attempting_unmapped_optional_method_injection()
 		{
-			var injectee : OptionalOneRequiredParameterMethodInjectee =
-					injector.InstantiateUnmapped(OptionalOneRequiredParameterMethodInjectee);
-			Assert.assertNull("injectee mustn\'t contain Interface instance", injectee.GetDependency());
+			OptionalOneRequiredParameterMethodInjectee injectee =
+					injector.InstantiateUnmapped<OptionalOneRequiredParameterMethodInjectee>();
+			Assert.Null(injectee.GetDependency(), "injectee mustn't contain Interface instance");
 		}
 
 		[Test]
 		public void soft_mapping_is_used_if_no_parent_injector_available()
 		{
-			injector.Map(typeof(Interface)).softly().ToType(typeof(Clazz));
-			Assert.NotNull(injector.getInstance(Interface));
+			injector.Map(typeof(Interface)).Softly().ToType(typeof(Clazz));
+			Assert.NotNull(injector.GetInstance(typeof(Interface)));
 		}
 
 		[Test]
 		public void parent_mapping_is_used_instead_of_soft_child_mapping()
 		{
-			const childInjector : Injector = injector.createChildInjector();
+			Injector childInjector = injector.CreateChildInjector();
 			injector.Map(typeof(Interface)).ToType(typeof(Clazz));
-			childInjector.Map(typeof(Interface)).softly().ToType(typeof(Clazz)2);
-			Assert.AreEqual(Clazz, childInjector.getInstance(Interface)['constructor']);
+			childInjector.Map(typeof(Interface)).Softly().ToType(typeof(Clazz2));
+			Assert.True(childInjector.GetInstance<Interface>() is Clazz);
 		}
 
 		[Test]
 		public void local_mappings_are_used_in_own_injector()
 		{
-			injector.Map(typeof(Interface)).locally().ToType(typeof(Clazz));
-			Assert.NotNull(injector.getInstance(Interface));
+			injector.Map(typeof(Interface)).Locally().ToType(typeof(Clazz));
+			Assert.NotNull(injector.GetInstance<Interface>());
 		}
 
-		[Test(expects="org.swiftsuspenders.errors.InjectorError")]
+		[Test, ExpectedException(typeof(InjectorMissingMappingException))]
 		public void local_mappings_arent_shared_with_child_injectors()
 		{
-			const childInjector : Injector = injector.createChildInjector();
-			injector.Map(typeof(Interface)).locally().ToType(typeof(Clazz));
-			childInjector.getInstance(Interface);
+			Injector childInjector = injector.CreateChildInjector();
+			injector.Map(typeof(Interface)).Locally().ToType(typeof(Clazz));
+			childInjector.GetInstance<Interface>();
 		}
 
-		[Test]
-		public void injector_dispatches_POST_INSTANTIATE_event_during_instance_construction()
-		{
-			assertThat(constructMappedTypeAndListenForEvent(InjectionEvent.POST_INSTANTIATE), isTrue());
-		}
+//		[Test]
+//		public void injector_dispatches_POST_INSTANTIATE_event_during_instance_construction()
+//		{
+//			Assert.True(constructMappedTypeAndListenForEvent(injector.POST_INSTANTIATE));
+//		}
 
+		/*
 		[Test]
 		public void injector_dispatches_PRE_CONSTRUCT_event_during_instance_construction()
 		{
@@ -585,7 +578,7 @@ namespace swiftsuspenders
 			injector.addEventListener(InjectionEvent.POST_INSTANTIATE, listener);
 			injector.addEventListener(InjectionEvent.PRE_CONSTRUCT, listener);
 			injector.addEventListener(InjectionEvent.POST_CONSTRUCT, listener);
-			const instance : Clazz = injector.getInstance(Clazz);
+			const instance : Clazz = injector.GetInstance(Clazz);
 		}
 
 		[Test]
@@ -617,7 +610,7 @@ namespace swiftsuspenders
 		{
 			injector.Map(typeof(Clazz));
 			listenToInjectorEvent(MappingEvent.PRE_MAPPING_CHANGE);
-			injector.Map(typeof(Clazz)).asSingleton();
+			injector.Map(typeof(Clazz)).AsSingleton();
 			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.PRE_MAPPING_CHANGE));
 		}
 
@@ -626,7 +619,7 @@ namespace swiftsuspenders
 		{
 			injector.Map(typeof(Clazz));
 			listenToInjectorEvent(MappingEvent.POST_MAPPING_CHANGE);
-			injector.Map(typeof(Clazz)).asSingleton();
+			injector.Map(typeof(Clazz)).AsSingleton();
 			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.POST_MAPPING_CHANGE));
 		}
 
@@ -635,7 +628,7 @@ namespace swiftsuspenders
 		{
 			injector.Map(typeof(Clazz));
 			listenToInjectorEvent(MappingEvent.PRE_MAPPING_CHANGE);
-			injector.Map(typeof(Clazz)).softly();
+			injector.Map(typeof(Clazz)).Softly();
 			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.PRE_MAPPING_CHANGE));
 		}
 
@@ -644,7 +637,7 @@ namespace swiftsuspenders
 		{
 			injector.Map(typeof(Clazz));
 			listenToInjectorEvent(MappingEvent.POST_MAPPING_CHANGE);
-			injector.Map(typeof(Clazz)).softly();
+			injector.Map(typeof(Clazz)).Softly();
 			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.POST_MAPPING_CHANGE));
 		}
 
@@ -653,7 +646,7 @@ namespace swiftsuspenders
 		{
 			injector.Map(typeof(Clazz));
 			listenToInjectorEvent(MappingEvent.PRE_MAPPING_CHANGE);
-			injector.Map(typeof(Clazz)).locally();
+			injector.Map(typeof(Clazz)).Locally();
 			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.PRE_MAPPING_CHANGE));
 		}
 
@@ -662,7 +655,7 @@ namespace swiftsuspenders
 		{
 			injector.Map(typeof(Clazz));
 			listenToInjectorEvent(MappingEvent.POST_MAPPING_CHANGE);
-			injector.Map(typeof(Clazz)).locally();
+			injector.Map(typeof(Clazz)).Locally();
 			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.POST_MAPPING_CHANGE));
 		}
 
@@ -671,7 +664,7 @@ namespace swiftsuspenders
 		{
 			injector.Map(typeof(Clazz));
 			listenToInjectorEvent(MappingEvent.POST_MAPPING_REMOVE);
-			injector.unmap(Clazz);
+			injector.Unmap(Clazz);
 			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.POST_MAPPING_REMOVE));
 		}
 
@@ -704,7 +697,7 @@ namespace swiftsuspenders
 				{
 					try
 					{
-						injector.Map(typeof(Clazz)).locally();
+						injector.Map(typeof(Clazz)).Locally();
 					}
 					catch (error : InjectorError)
 					{
@@ -714,15 +707,17 @@ namespace swiftsuspenders
 			injector.Map(typeof(Clazz));
 			assertThat(errorThrown, isTrue());
 		}
+		*/
 
-		private function constructMappedTypeAndListenForEvent(eventType : String) : Boolean
-		{
-			injector.Map(typeof(Clazz));
-			listenToInjectorEvent(eventType);
-			injector.getInstance(Clazz);
-			return receivedInjectorEvents.pop() == eventType;
-		}
-
+//		private bool constructMappedTypeAndListenForEvent(Delegate eventType)
+//		{
+//			injector.Map(typeof(Clazz));
+//			listenToInjectorEvent(eventType);
+//			injector.GetInstance<Clazz>();
+//			return receivedInjectorEvents.pop() == eventType;
+//		}
+		
+		/*
 		private function injectIntoInstanceAndListenForEvent(eventType : String) : Boolean
 		{
 			const injectee : ClassInjectee = new ClassInjectee();
@@ -738,41 +733,47 @@ namespace swiftsuspenders
 			injector.Map(typeof(Clazz));
 			return receivedInjectorEvents.pop() == eventType;
 		}
+		*/
 
-		private function listenToInjectorEvent(eventType : String)
-		{
-			injector.addEventListener(eventType, function(event : Event) : void
-			{
-				receivedInjectorEvents.push(event.type);
-			});
-		}
+//		private void listenToInjectorEvent(event eventType)
+//		{
+//			/*
+//			injector.addEventListener(eventType, function(event : Event) : void
+//			{
+//				receivedInjectorEvents.push(event.type);
+//			});
+//			*/
+//		}
 
-		[Test]
-		public void injector_makes_inject_parameters_available_to_providers()
-		{
-			const provider : UnknownParametersUsingProvider = new UnknownParametersUsingProvider();
-			injector.Map(typeof(Clazz)).toProvider(provider);
-			injector.InstantiateUnmapped(UnknownInjectParametersListInjectee);
-			assertThat(provider.parameterValue, equalTo('true,str,123'));
-		}
+		// Hmm, optional parameters injection for provider
+//		[Test]
+//		public void injector_makes_inject_parameters_available_to_providers()
+//		{
+//			UnknownParametersUsingProvider provider = new UnknownParametersUsingProvider();
+//			injector.Map(typeof(Clazz)).ToProvider(provider);
+//			injector.InstantiateUnmapped(UnknownInjectParametersListInjectee);
+//			assertThat(provider.parameterValue, equalTo('true,str,123'));
+//		}
 
+		// TypeDescription Tests
+		/*
 		[Test]
 		public void injector_uses_manually_supplied_type_description_for_field()
 		{
-			const description : TypeDescription = new TypeDescription();
-			description.addFieldInjection('property', Clazz);
-			injector.addTypeDescription(NamedClassInjectee, description);
+			TypeDescription description = new TypeDescription();
+			description.AddFieldInjection("property", typeof(Clazz));
+			injector.AddTypeDescription(NamedClassInjectee, description);
 			injector.Map(typeof(Clazz));
-			const injectee : NamedClassInjectee = injector.InstantiateUnmapped(NamedClassInjectee);
-			assertThat(injectee.property, isA(Clazz));
+			NamedClassInjectee injectee = injector.InstantiateUnmapped(NamedClassInjectee);
+			Assert.IsInstanceOf<Clazz>(injectee.property);
 		}
-
+		
 		[Test]
 		public void injector_uses_manually_supplied_type_description_for_method()
 		{
 			const description : TypeDescription = new TypeDescription();
-			description.addMethodInjection('setDependency', [Clazz]);
-			injector.addTypeDescription(OneNamedParameterMethodInjectee, description);
+			description.AddMethodInjection('setDependency', [Clazz]);
+			injector.AddTypeDescription(OneNamedParameterMethodInjectee, description);
 			injector.Map(typeof(Clazz));
 			const injectee : OneNamedParameterMethodInjectee =
 				injector.InstantiateUnmapped(OneNamedParameterMethodInjectee);
@@ -784,7 +785,7 @@ namespace swiftsuspenders
 		{
 			const description : TypeDescription = new TypeDescription(false);
 			description.setConstructor([Clazz]);
-			injector.addTypeDescription(OneNamedParameterConstructorInjectee, description);
+			injector.AddTypeDescription(OneNamedParameterConstructorInjectee, description);
 			injector.Map(typeof(Clazz));
 			const injectee : OneNamedParameterConstructorInjectee =
 				injector.InstantiateUnmapped(OneNamedParameterConstructorInjectee);
@@ -796,13 +797,16 @@ namespace swiftsuspenders
 		{
 			const description : TypeDescription = new TypeDescription();
 			description.addPostConstructMethod('doSomeStuff', [Clazz]);
-			injector.addTypeDescription(PostConstructWithArgInjectee, description);
+			injector.AddTypeDescription(PostConstructWithArgInjectee, description);
 			injector.Map(typeof(Clazz));
 			const injectee : PostConstructWithArgInjectee =
 				injector.InstantiateUnmapped(PostConstructWithArgInjectee);
 			assertThat(injectee.property, isA(Clazz));
 		}
+		*/
 
+		// Funky post construct methods
+		/*
 		[Test]
 		public void injector_executes_injected_PostConstruct_method_vars()
 		{
@@ -820,257 +824,252 @@ namespace swiftsuspenders
 				injector.InstantiateUnmapped(PostConstructInjectedVarInjectee);
 			assertThat(injectee.property, isA(Clazz));
 		}
+		*/
 
 		[Test]
 		public void unmapping_singleton_provider_invokes_PreDestroy_methods_on_singleton()
 		{
-			injector.Map(typeof(Clazz)).asSingleton();
-			const singleton : Clazz = injector.getInstance(Clazz);
-			assertThat(singleton, hasPropertyWithValue("preDestroyCalled", false));
-			injector.unmap(Clazz);
-			assertThat(singleton, hasPropertyWithValue("preDestroyCalled", true));
+			injector.Map(typeof(Clazz)).AsSingleton();
+			Clazz singleton = injector.GetInstance<Clazz>();
+			Assert.False (singleton.preDestroyCalled);
+			injector.Unmap(typeof(Clazz));
+			Assert.True (singleton.preDestroyCalled);
 		}
 
 		[Test]
 		public void destroyInstance_invokes_PreDestroy_methods_on_instance()
 		{
-			const target : Clazz = new Clazz();
-			assertThat(target, hasPropertyWithValue("preDestroyCalled", false));
-			injector.destroyInstance(target);
-			assertThat(target, hasPropertyWithValue("preDestroyCalled", true));
+			Clazz target = new Clazz();
+			Assert.False (target.preDestroyCalled);
+			injector.DestroyInstance(target);
+			Assert.True (target.preDestroyCalled);
 		}
 
 		[Test]
 		public void teardown_destroys_all_singletons()
 		{
-			injector.Map(typeof(Clazz)).asSingleton();
+			injector.Map(typeof(Clazz)).AsSingleton();
 			injector.Map(typeof(Interface)).ToSingleton(typeof(Clazz));
-			const singleton1 : Clazz = injector.getInstance(Clazz);
-			const singleton2 : Clazz = injector.getInstance(Interface);
-			assertThat(singleton1, hasPropertyWithValue("preDestroyCalled", false));
-			assertThat(singleton2, hasPropertyWithValue("preDestroyCalled", false));
-			injector.teardown();
-			assertThat(singleton1, hasPropertyWithValue("preDestroyCalled", true));
-			assertThat(singleton2, hasPropertyWithValue("preDestroyCalled", true));
+			Clazz singleton1 = injector.GetInstance<Clazz>();
+			Clazz singleton2 = injector.GetInstance(typeof(Interface)) as Clazz;
+			Assert.False (singleton1.preDestroyCalled);
+			Assert.False (singleton2.preDestroyCalled);
+			injector.Teardown();
+			Assert.True (singleton1.preDestroyCalled);
+			Assert.True (singleton2.preDestroyCalled);
 		}
 
 		[Test]
 		public void teardown_destroys_all_instances_it_injected_into()
 		{
-			const target1 : Clazz = new Clazz();
+			Clazz target1 = new Clazz();
 			injector.InjectInto(target1);
 			injector.Map(typeof(Clazz));
-			const target2 : Clazz = injector.getInstance(Clazz);
-			assertThat(target1, hasPropertyWithValue("preDestroyCalled", false));
-			assertThat(target2, hasPropertyWithValue("preDestroyCalled", false));
-			injector.teardown();
-			assertThat(target1, hasPropertyWithValue("preDestroyCalled", true));
-			assertThat(target2, hasPropertyWithValue("preDestroyCalled", true));
+			Clazz target2 = injector.GetInstance<Clazz>();
+			Assert.False (target1.preDestroyCalled);
+			Assert.False (target2.preDestroyCalled);
+			injector.Teardown();
+			Assert.True (target1.preDestroyCalled);
+			Assert.True (target2.preDestroyCalled);
 		}
 		
 		[Test]
 		public void fallbackProvider_is_null_by_default()
 		{
-			assertThat(injector.fallbackProvider, equalTo(null));
+			Assert.Null(injector.fallbackProvider);
 		}
-		
+
 		[Test]
 		public void satisfies_isTrue_if_fallbackProvider_satisifies()
 		{
 			injector.fallbackProvider = new MoodyProvider(true);
-			assertThat(injector.satisfies(Clazz), isTrue());
+			Assert.True(injector.Satisfies(typeof(Clazz)));
 		}
 		
 		[Test]
 		public void satisfies_isFalse_if_fallbackProvider_doesnt_satisfy()
 		{
 			injector.fallbackProvider = new MoodyProvider(false);
-			assertThat(injector.satisfies(Clazz), isFalse());
+			Assert.False(injector.Satisfies(typeof(Clazz)));
 		}
-		
+
 		[Test]
 		public void satisfies_returns_false_without_error_if_fallback_provider_cannot_satisfy_request()
 		{
 			injector.fallbackProvider = new MoodyProvider(false);
-			assertThat(injector.satisfies(Interface), isFalse());
+			Assert.False(injector.Satisfies<Interface>());
 		}
 		
 		[Test]
 		public void satisfies_returns_true_without_error_if_interface_requested_from_ProviderThatCanDoInterfaces()
 		{
-			injector.fallbackProvider = new ProviderThatCanDoInterfaces(Clazz);
-			assertThat(injector.satisfies(Interface), isTrue());
+			injector.fallbackProvider = new ProviderThatCanDoInterfaces(typeof(Clazz));
+			Assert.True(injector.Satisfies<Interface>());
 		}
-		
-		[Test]
-		public void satisfies_returns_false_for_unmapped_common_base_types()
-		{
-			injector.fallbackProvider = new MoodyProvider(true);
-			const baseTypes:Array = [Array, Boolean, Class, Function, int, Number, Object, String, uint];
-			// yes, loops in tests are bad, but this test case is already 1000 lines long!
-			const iLength:uint = baseTypes.length;
-			for (var i:uint = 0; i < iLength; i++)
-			{
-				assertThat(injector.satisfies(baseTypes[i]), isFalse());
-			}
-		}
+
+		//TODO: Add this test as we are checking for base types, note: object is mapped and shouldn't be
+//		[Test]
+//		public void satisfies_returns_false_for_unmapped_common_base_types()
+//		{
+//			injector.fallbackProvider = new MoodyProvider(true);
+//			Type[] baseTypes = new Type[]{typeof(bool), typeof(int), typeof(float), typeof(uint), typeof(object), typeof(double), typeof(string)};
+//			// yes, loops in tests are bad, but this test case is already 1000 lines long!
+//			for (uint i = 0; i < baseTypes.Length; i++)
+//			{
+//				Assert.False(injector.Satisfies(baseTypes[i]));
+//			}
+//		}
 		
 		[Test]
 		public void satisfiesDirectly_isTrue_if_fallbackProvider_satisifies()
 		{
 			injector.fallbackProvider = new MoodyProvider(true);
-			assertThat(injector.satisfiesDirectly(Clazz), isTrue());
+			Assert.True(injector.SatisfiesDirectly(typeof(Clazz)));
 		}
-		
+
 		[Test]
 		public void satisfiesDirectly_isFalse_if_no_local_fallbackProvider()
 		{
 			injector.fallbackProvider = new MoodyProvider(true);
-			const childInjector:Injector = injector.createChildInjector();
-			assertThat(childInjector.satisfiesDirectly(Clazz), isFalse());
+			Injector childInjector = injector.CreateChildInjector();
+			Assert.False(childInjector.SatisfiesDirectly(typeof(Clazz)));
 		}
 		
 		[Test]
 		public void instantiateUnmapped_returns_new_instance_even_if_mapped_instance_exists()
 		{
-			const mappedValue:Clazz = new Clazz();
+			Clazz mappedValue = new Clazz();
 			injector.Map(typeof(Clazz)).ToValue(mappedValue);
-			const instance:Clazz = injector.InstantiateUnmapped(Clazz);
-			assertThat(instance, not(equalTo(mappedValue)));
+			Clazz instance = injector.InstantiateUnmapped<Clazz>();
+			Assert.AreNotEqual(instance, mappedValue);
 		}
-		
+
 		[Test]
 		public void hasMapping_returns_true_for_parent_mappings()
 		{
 			injector.Map(typeof(Clazz)).ToValue(new Clazz());
-			const childInjector:Injector = injector.createChildInjector();
-			assertThat(childInjector.hasMapping(Clazz), isTrue());
+			Injector childInjector = injector.CreateChildInjector();
+			Assert.True(childInjector.HasMapping(typeof(Clazz)));
 		}
 		
 		[Test]
 		public void hasMapping_returns_true_for_local_mappings()
 		{
 			injector.Map(typeof(Clazz)).ToValue(new Clazz());
-			assertThat(injector.hasMapping(Clazz), isTrue());
+			Assert.True(injector.HasMapping(typeof(Clazz)));
 		}
 		
 		[Test]
 		public void hasMapping_returns_false_where_mapping_doesnt_exist()
 		{
-			assertThat(injector.hasMapping(Clazz), isFalse());
+			Assert.False(injector.HasMapping(typeof(Clazz)));
 		}
 		
 		[Test]
 		public void hasDirectMapping_returns_false_for_parent_mappings()
 		{
 			injector.Map(typeof(Clazz)).ToValue(new Clazz());
-			const childInjector:Injector = injector.createChildInjector();
-			assertThat(childInjector.hasDirectMapping(Clazz), isFalse());
+			Injector childInjector = injector.CreateChildInjector();
+			Assert.False(childInjector.HasDirectMapping(typeof(Clazz)));
 			
 		}
-		
+
 		[Test]
 		public void hasDirectMapping_returns_true_for_local_mappings()
 		{
 			injector.Map(typeof(Clazz)).ToValue(new Clazz());
-			assertThat(injector.hasDirectMapping(Clazz), isTrue());
+			Assert.True(injector.HasDirectMapping(typeof(Clazz)));
 		}
 		
 		[Test]
 		public void getOrCreateNewInstance_provides_mapped_value_where_mapping_exists()
 		{
-			injector.Map(typeof(Clazz)).asSingleton();
-			const instance1:Clazz = injector.getOrCreateNewInstance(Clazz);
-			const instance2:Clazz = injector.getOrCreateNewInstance(Clazz);
-			assertThat(instance1, equalTo(instance2));
+			injector.Map(typeof(Clazz)).AsSingleton();
+			Clazz instance1 = injector.GetOrCreateNewInstance(typeof(Clazz)) as Clazz;
+			Clazz instance2 = injector.GetOrCreateNewInstance(typeof(Clazz)) as Clazz;
+			Assert.AreEqual(instance1, instance2);
 		}
-		
+
 		[Test]
 		public void getOrCreateNewInstance_instantiates_new_instance_where_no_mapping_exists()
 		{
-			const instance1:Clazz = injector.getOrCreateNewInstance(Clazz);
-			assertThat(instance1, isA(Clazz));
+			Clazz instance1 = injector.GetOrCreateNewInstance(typeof(Clazz)) as Clazz;
+			Assert.IsInstanceOf<Clazz>(instance1);
 		}
 		
 		[Test]
 		public void getOrCreateNewInstance_instantiates_new_instances_each_time_where_no_mapping_exists()
 		{
-			const instance1:Clazz = injector.getOrCreateNewInstance(Clazz);
-			const instance2:Clazz = injector.getOrCreateNewInstance(Clazz);
-			assertThat(instance1, not(equalTo(instance2)));
+			Clazz instance1 = injector.GetOrCreateNewInstance(typeof(Clazz)) as Clazz;
+			Clazz instance2 = injector.GetOrCreateNewInstance(typeof(Clazz)) as Clazz;
+			Assert.AreNotEqual(instance1, instance2);
 		}
-		
+
 		[Test]
 		public void satisfies_doesnt_use_fallbackProvider_from_ancestors_if_blockParentFallbackProvider_is_set()
 		{
-			injector.fallbackProvider = new ProviderThatCanDoInterfaces(Clazz);
-			const childInjector:Injector = injector.createChildInjector();
+			injector.fallbackProvider = new ProviderThatCanDoInterfaces(typeof(Clazz));
+			Injector childInjector = injector.CreateChildInjector();
 			childInjector.blockParentFallbackProvider = true;
-			assertThat(childInjector.satisfies(Clazz), isFalse());
+			Assert.False(childInjector.Satisfies<Clazz>());
 		}
 		
 		[Test, ExpectedException(typeof(InjectorMissingMappingException))]
 		public void getInstance_doesnt_use_fallbackProvider_from_ancestors_if_blockParentFallbackProvider_is_set()
 		{
-			injector.fallbackProvider = new ProviderThatCanDoInterfaces(Clazz);
-			const childInjector:Injector = injector.createChildInjector();
+			injector.fallbackProvider = new ProviderThatCanDoInterfaces(typeof(Clazz));
+			Injector childInjector = injector.CreateChildInjector();
 			childInjector.blockParentFallbackProvider = true;
-			childInjector.getInstance(Clazz);
+			childInjector.GetInstance(typeof(Clazz));
 		}
-		
-		// QUERY : This doesn't look like it's doing XML stuff??
-		
+
+		// Not an XML test...
 		[Test]
 		public void performXMLConfiguredConstructorInjectionWithOneNamedParameter()
 		{
 			injector = new Injector();
-			injector.Map(typeof(Clazz), 'namedDependency').ToType(typeof(Clazz));
-			var injectee:OneNamedParameterConstructorInjectee = injector.InstantiateUnmapped(OneNamedParameterConstructorInjectee);
-			Assert.NotNull("Instance of Class should have been injected for named Clazz parameter", injectee.GetDependency() );
+			injector.Map(typeof(Clazz), InjectEnum.NAMED_DEPENDENCY).ToType(typeof(Clazz));
+			OneNamedParameterConstructorInjectee injectee = injector.InstantiateUnmapped<OneNamedParameterConstructorInjectee>();
+			Assert.NotNull(injectee.GetDependency(), "Instance of Class should have been injected for named Clazz parameter");
 		}
-		
-		// Not sure what this test is doing
 
 		[Test]
-		public void performMappedMappingInjection()
+		public void performOtherMappingInjection()
 		{
-			var mapping : InjectionMapping = injector.Map(typeof(Interface));
+			InjectionMapping mapping = injector.Map(typeof(Interface));
 			mapping.ToSingleton(typeof(Clazz));
-			injector.Map(typeof(Interface)2).toProvider(new OtherMappingProvider(mapping));
-			var injectee:MultipleSingletonsOfSameClassInjectee = injector.InstantiateUnmapped(MultipleSingletonsOfSameClassInjectee);
-			Assert.AreEqual("Instance field 'property1' should be identical to Instance field 'property2'", injectee.property1, injectee.property2);
+			injector.Map(typeof(Interface2)).ToProvider(new OtherMappingProvider(mapping));
+			MultipleSingletonsOfSameClassInjectee injectee = injector.InstantiateUnmapped<MultipleSingletonsOfSameClassInjectee>();
+			Assert.AreEqual(injectee.property1, injectee.property2, "Instance field 'property1' should be identical to Instance field 'property2'");
 		}
-		
-		// Not sure what this test is doing
 
 		[Test]
-		public void performMappedNamedMappingInjection()
+		public void performNamedOtherMappingInjection()
 		{
-			var mapping : InjectionMapping = injector.Map(typeof(Interface));
+			InjectionMapping mapping = injector.Map(typeof(Interface));
 			mapping.ToSingleton(typeof(Clazz));
-			injector.Map(typeof(Interface)2).toProvider(new OtherMappingProvider(mapping));
-			injector.Map(typeof(Interface), 'name1').toProvider(new OtherMappingProvider(mapping));
-			injector.Map(typeof(Interface)2, 'name2').toProvider(new OtherMappingProvider(mapping));
-			var injectee:MultipleNamedSingletonsOfSameClassInjectee = injector.InstantiateUnmapped(MultipleNamedSingletonsOfSameClassInjectee);
-			Assert.AreEqual("Instance field 'property1' should be identical to Instance field 'property2'", injectee.property1, injectee.property2);
-			Assert.AreEqual("Instance field 'property1' should be identical to Instance field 'namedProperty1'", injectee.property1, injectee.namedProperty1);
-			Assert.AreEqual("Instance field 'property1' should be identical to Instance field 'namedProperty2'", injectee.property1, injectee.namedProperty2);
+			injector.Map(typeof(Interface2)).ToProvider(new OtherMappingProvider(mapping));
+			injector.Map(typeof(Interface), "name1").ToProvider(new OtherMappingProvider(mapping));
+			injector.Map(typeof(Interface2), "name2").ToProvider(new OtherMappingProvider(mapping));
+			MultipleNamedSingletonsOfSameClassInjectee injectee = injector.InstantiateUnmapped<MultipleNamedSingletonsOfSameClassInjectee>();
+			Assert.AreEqual(injectee.property1, injectee.property2, "Instance field 'property1' should be identical to Instance field 'property2'");
+			Assert.AreEqual(injectee.property1, injectee.namedProperty1, "Instance field 'property1' should be identical to Instance field 'namedProperty1'");
+			Assert.AreEqual(injectee.property1, injectee.namedProperty2, "Instance field 'property1' should be identical to Instance field 'namedProperty2'");
 		}
 
 		[Test]
 		public void two_parameters_constructor_injection_with_constructor_injected_dependencies_fulfilled()
 		{
 			injector.Map(typeof(Clazz));
-			injector.Map(OneParameterConstructorInjectee);
-			injector.Map(TwoParametersConstructorInjectee);
-			injector.Map(String).ToValue('stringDependency');
+			injector.Map(typeof(OneParameterConstructorInjectee));
+			injector.Map(typeof(TwoParametersConstructorInjectee));
+			injector.Map(typeof(String)).ToValue("stringDependency");
 
-			var injectee:TwoParametersConstructorInjecteeWithConstructorInjectedDependencies = 
-				injector.InstantiateUnmapped(TwoParametersConstructorInjecteeWithConstructorInjectedDependencies);
-			Assert.NotNull("Instance of Class should have been injected for OneParameterConstructorInjectee parameter", injectee.getDependency1() );
-			Assert.NotNull("Instance of Class should have been injected for TwoParametersConstructorInjectee parameter", injectee.GetDependency2() );
+			TwoParametersConstructorInjecteeWithConstructorInjectedDependencies injectee = 
+				injector.InstantiateUnmapped<TwoParametersConstructorInjecteeWithConstructorInjectedDependencies>();
+			Assert.NotNull(injectee.GetDependency1(), "Instance of Class should have been injected for OneParameterConstructorInjectee parameter");
+			Assert.NotNull(injectee.GetDependency2(), "Instance of Class should have been injected for TwoParametersConstructorInjectee parameter");
 		}
-		*/
 	}
 }
 

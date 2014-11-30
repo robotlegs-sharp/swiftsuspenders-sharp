@@ -10,7 +10,7 @@ namespace swiftsuspenders.support.types
 		{
 		}
 
-//		[PreDestroy]
+		[PreDestroy]
 		public void preDestroy()
 		{
 			preDestroyCalled = true;
