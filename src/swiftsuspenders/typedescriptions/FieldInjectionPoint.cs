@@ -2,16 +2,17 @@
 using System.Reflection;
 using swiftsuspenders.dependencyproviders;
 using swiftsuspenders.errors;
+using swiftsuspenders.mapping;
 
 namespace swiftsuspenders.typedescriptions
 {
 	public class FieldInjectionPoint : InjectionPoint
 	{
-		private object _mappingId;
+		private MappingId _mappingId;
 		private FieldInfo _fieldInfo;
 		private bool _optional;
 
-		public FieldInjectionPoint (object mappingId, FieldInfo fieldInfo, bool optional)
+		public FieldInjectionPoint (MappingId mappingId, FieldInfo fieldInfo, bool optional)
 		{
 			_mappingId = mappingId;
 			_fieldInfo = fieldInfo;

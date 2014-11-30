@@ -41,9 +41,9 @@ namespace swiftsuspenders
 
 		public event InjectionMappingDelegate MAPPING_OVERRIDE;
 
-		public delegate void InjectionMappingDelegate(Type mappedType, object mappedKey, InjectionMapping instanceType);
+		public delegate void InjectionMappingDelegate(MappingId mappingId, InjectionMapping instanceType);
 
-		public delegate void MappingDelegate(Type mappedType, object mappedKey);
+		public delegate void MappingDelegate(MappingId mappingId);
 
 		public event InjectionDelegate POST_INSTANTIATE;
 
@@ -93,7 +93,7 @@ namespace swiftsuspenders
 			}
 		}
 
-		public Dictionary<object, DependencyProvider> providerMappings = new Dictionary<object, DependencyProvider> ();
+		public Dictionary<MappingId, DependencyProvider> providerMappings = new Dictionary<MappingId, DependencyProvider> ();
 
 		/*============================================================================*/
 		/* Private Properties                                                         */
@@ -136,8 +136,8 @@ namespace swiftsuspenders
 
 		public InjectionMapping Map(Type type, object key = null)
 		{
-			object mappingId = key == null ? type as object : key as object;
-			return _mappings.ContainsKey (mappingId) ? _mappings [mappingId] : CreateMapping (type, key, mappingId); 
+			MappingId mappingId = new MappingId (type, key);
+			return _mappings.ContainsKey (mappingId) ? _mappings [mappingId] : CreateMapping (mappingId); 
 		}
 
 		public void Unmap<T>(object key = null)
@@ -147,7 +147,7 @@ namespace swiftsuspenders
 
 		public void Unmap(Type type, object key = null)
 		{
-			object mappingId = key == null ? type as object : key as object;
+			MappingId mappingId = new MappingId (type, key);
 			InjectionMapping mapping;
 			_mappings.TryGetValue(mappingId, out mapping);
 			if (mapping != null && mapping.isSealed)
@@ -163,7 +163,7 @@ namespace swiftsuspenders
 			_mappings.Remove (mappingId);
 			providerMappings.Remove (mappingId);
 			if (POST_MAPPING_REMOVE != null)
-				POST_MAPPING_REMOVE (type, key);
+				POST_MAPPING_REMOVE (mappingId);
 		}
 
 		public bool Satisfies<T>(object key = null)
@@ -173,7 +173,7 @@ namespace swiftsuspenders
 
 		public bool Satisfies(Type type, object key = null)
 		{
-			object mappingId = key == null ? type as object : key as object;
+			MappingId mappingId = new MappingId (type, key);
 			return GetProvider(mappingId, true) != null;
 		}
 
@@ -185,7 +185,7 @@ namespace swiftsuspenders
 		public bool SatisfiesDirectly(Type type, object key = null)
 		{
 			return HasDirectMapping(type, key)
-				|| GetDefaultProvider(key, false) != null;
+				|| GetDefaultProvider(new MappingId(type,key), false) != null;
 		}
 
 		public InjectionMapping GetMapping<T>(object key = null)
@@ -195,7 +195,7 @@ namespace swiftsuspenders
 
 		public InjectionMapping GetMapping(Type type, object key = null)
 		{
-			object mappingId = key == null ? type as object : key as object;
+			MappingId mappingId = new MappingId (type, key);
 			InjectionMapping mapping;
 			if (_mappings.TryGetValue(mappingId, out mapping)) 
 			{
@@ -224,7 +224,7 @@ namespace swiftsuspenders
 
 		public object GetInstance(Type type, object key = null, Type targetType = null)
 		{
-			object mappingId = key == null ? type as object : key as object;
+			MappingId mappingId = new MappingId (type, key);
 			DependencyProvider provider = GetProvider (mappingId);
 			if (provider == null) provider = GetDefaultProvider(mappingId, true);
 
@@ -341,7 +341,7 @@ namespace swiftsuspenders
 
 		public bool HasMapping(Type type, object key = null)
 		{
-			object mappingId = key == null ? type as object : key as object;
+			MappingId mappingId = new MappingId (type, key);
 			return GetProvider(mappingId) != null;
 		}
 
@@ -352,7 +352,7 @@ namespace swiftsuspenders
 
 		public bool HasDirectMapping(Type type, object key = null)
 		{
-			object mappingId = key == null ? type as object : key as object;
+			MappingId mappingId = new MappingId (type, key);
 			return _mappings.ContainsKey(mappingId);
 		}
 
@@ -360,22 +360,22 @@ namespace swiftsuspenders
 		/* Internal Functions                                                         */
 		/*============================================================================*/
 
-		public void DispatchPreMappingChangeEvent(Type mappedType, object mappedKey, InjectionMapping injectionMapping)
+		public void DispatchPreMappingChangeEvent(MappingId mappingId, InjectionMapping injectionMapping)
 		{
 			if (PRE_MAPPING_CHANGE != null)
-				PRE_MAPPING_CHANGE (mappedType, mappedKey, injectionMapping);
+				PRE_MAPPING_CHANGE (mappingId, injectionMapping);
 		}
 
-		public void DispatchPostMappingChangeEvent(Type mappedType, object mappedKey, InjectionMapping injectionMapping)
+		public void DispatchPostMappingChangeEvent(MappingId mappingId, InjectionMapping injectionMapping)
 		{
 			if (POST_MAPPING_CHANGE != null)
-				POST_MAPPING_CHANGE (mappedType, mappedKey, injectionMapping);
+				POST_MAPPING_CHANGE (mappingId, injectionMapping);
 		}
 
-		public void DispatchMappingOverrideEvent(Type mappedType, object mappedKey, InjectionMapping injectionMapping)
+		public void DispatchMappingOverrideEvent(MappingId mappingId, InjectionMapping injectionMapping)
 		{
 			if (MAPPING_OVERRIDE != null)
-				MAPPING_OVERRIDE (mappedType, mappedKey, injectionMapping);
+				MAPPING_OVERRIDE (mappingId, injectionMapping);
 		}
 
 		private bool CanBeInstantiated(Type type)
@@ -385,7 +385,7 @@ namespace swiftsuspenders
 		}
 
 		public DependencyProvider GetProvider(
-			object mappingId, bool fallbackToDefault = true)
+			MappingId mappingId, bool fallbackToDefault = true)
 		{
 			DependencyProvider softProvider = null;
 			Injector injector = this;
@@ -417,7 +417,7 @@ namespace swiftsuspenders
 		}
 
 		private DependencyProvider GetDefaultProvider(
-			object mappingId, bool consultParents)
+			MappingId mappingId, bool consultParents)
 		{
 			//No meaningful way to automatically create base types without names
 			//TODD: Make the basetypes check work
@@ -441,7 +441,7 @@ namespace swiftsuspenders
 		/* Private Functions                                                          */
 		/*============================================================================*/
 
-		private InjectionMapping CreateMapping(Type type, object key, object mappingId)
+		private InjectionMapping CreateMapping(MappingId mappingId)
 		{
 			if (_mappingsInProcess.ContainsKey (mappingId))
 				throw new InjectorException ("Can't change a mapping from inside a listener to it's creation event");
@@ -449,15 +449,15 @@ namespace swiftsuspenders
 			_mappingsInProcess [mappingId] = true;
 
 			if (PRE_MAPPING_CREATE != null)
-				PRE_MAPPING_CREATE (type, key);
+				PRE_MAPPING_CREATE (mappingId);
 
-			InjectionMapping mapping = new InjectionMapping (this, type, key, mappingId);
+			InjectionMapping mapping = new InjectionMapping (this, mappingId);
 			_mappings [mappingId] = mapping;
 
 			object sealKey = mapping.Seal ();
 
 			if (POST_MAPPING_CREATE != null)
-				POST_MAPPING_CREATE (type, key, mapping);
+				POST_MAPPING_CREATE (mappingId, mapping);
 
 			_mappingsInProcess.Remove (mappingId);
 			mapping.Unseal (sealKey);

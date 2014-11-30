@@ -5,6 +5,7 @@ using System.Reflection;
 using swiftsuspenders.dependencyproviders;
 using swiftsuspenders;
 using swiftsuspenders.errors;
+using swiftsuspenders.mapping;
 
 namespace swiftsuspenders.typedescriptions
 {
@@ -37,9 +38,11 @@ namespace swiftsuspenders.typedescriptions
 			for (int i = 0; i < length; i++) 
 			{
 				Type parameterType = parameterInfos [i].ParameterType;
-				object mappingId = parameterType as object;
+				MappingId mappingId;
 				if (_keys != null && _keys.Length > i && _keys[i] != null)
-					mappingId = _keys[i];
+					mappingId = new MappingId (parameterType, _keys[i]);
+				else
+					mappingId = new MappingId (parameterType);
 
 				DependencyProvider provider = injector.GetProvider (mappingId);
 				if (provider == null) 

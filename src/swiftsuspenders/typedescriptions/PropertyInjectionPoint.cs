@@ -4,16 +4,17 @@ using System.Reflection;
 using swiftsuspenders;
 using swiftsuspenders.dependencyproviders;
 using swiftsuspenders.errors;
+using swiftsuspenders.mapping;
 
 namespace swiftsuspenders.typedescriptions
 {
 	public class PropertyInjectionPoint : InjectionPoint
 	{
-		private object _mappingId;
+		private MappingId _mappingId;
 		private PropertyInfo _propertyInfo;
 		private bool _optional;
 
-		public PropertyInjectionPoint (object mappingId, PropertyInfo propertyInfo, bool optional)
+		public PropertyInjectionPoint (MappingId mappingId, PropertyInfo propertyInfo, bool optional)
 		{
 			_mappingId = mappingId;
 			_propertyInfo = propertyInfo;

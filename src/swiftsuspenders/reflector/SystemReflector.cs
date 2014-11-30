@@ -3,6 +3,7 @@ using swiftsuspenders.typedescriptions;
 using System.Reflection;
 using System.Collections.Generic;
 using swiftsuspenders.errors;
+using swiftsuspenders.mapping;
 
 namespace swiftsuspenders.reflector
 {
@@ -14,15 +15,14 @@ namespace swiftsuspenders.reflector
 
 		public TypeDescription DescribeInjections (Type type)
 		{
-//			TypeDescription description = new TypeDescription(false);
 			TypeDescription description = new TypeDescription();
-//			description.ctor = new ConstructorInjectionPoint();
 			AddConstructorInjectionPoint (description, type);
 			AddPropertyInjectionPoints (description, type);
 			AddFieldInjectionPoints (description, type);
-			AddMethodInjectionPoints (description, type);
-			AddPostConstructMethodPoints (description, type);
-			AddPreDestroyMethodPoints (description, type);
+			MethodInfo[] methods = type.GetMethods ();
+			AddMethodInjectionPoints (description, methods);
+			AddPostConstructMethodPoints (description, methods);
+			AddPreDestroyMethodPoints (description, methods);
 			return description;
 		}
 
@@ -37,7 +37,6 @@ namespace swiftsuspenders.reflector
 				object[] injections = constructor.GetCustomAttributes (INJECT_ATTRIBUTE_TYPE, true);
 				if (injections.Length > 0) 
 				{
-					Console.WriteLine ("Injections: " + injections.Length);
 					Inject inject = injections[0] as Inject;
 					keys = inject.names;
 					constructorToInject = constructor;
@@ -62,7 +61,7 @@ namespace swiftsuspenders.reflector
 
 				Inject attr = injections [0] as Inject;
 				object key = attr.name;
-				object mappingId = key == null ? property.PropertyType as object : key as object;
+				MappingId mappingId = new MappingId (property.PropertyType, key);
 				PropertyInjectionPoint injectionPoint = new PropertyInjectionPoint (mappingId, property, attr.optional); //injectParameters);
 				description.AddInjectionPoint(injectionPoint);
 			}
@@ -79,16 +78,15 @@ namespace swiftsuspenders.reflector
 
 				Inject attr = injections [0] as Inject;
 				object key = attr.name;
-				object mappingId = key == null ? field.FieldType as object : key as object;
+				MappingId mappingId = new MappingId (field.FieldType, key);
 				FieldInjectionPoint injectionPoint = new FieldInjectionPoint (mappingId,
 					field, attr.optional);// injectParameters.optional == 'true', injectParameters);
 				description.AddInjectionPoint(injectionPoint);
 			}
 		}
 
-		private void AddMethodInjectionPoints(TypeDescription description, Type type)
+		private void AddMethodInjectionPoints(TypeDescription description, MethodInfo[] methods)
 		{
-			MethodInfo[] methods = type.GetMethods ();
 			foreach (MethodInfo method in methods) 
 			{
 				object[] injections = method.GetCustomAttributes (INJECT_ATTRIBUTE_TYPE, true);
@@ -102,10 +100,8 @@ namespace swiftsuspenders.reflector
 			}
 		}
 
-		private void AddPostConstructMethodPoints(TypeDescription description, Type type)
+		private void AddPostConstructMethodPoints(TypeDescription description, MethodInfo[] methods)
 		{
-			MethodInfo[] methods = type.GetMethods ();
-
 			List<OrderedInjectionPoint> orderedInjectionPoints = new List<OrderedInjectionPoint> ();
 			foreach (MethodInfo method in methods) 
 			{
@@ -124,10 +120,8 @@ namespace swiftsuspenders.reflector
 				description.AddInjectionPoint (point);
 		}
 
-		private void AddPreDestroyMethodPoints(TypeDescription description, Type type)
+		private void AddPreDestroyMethodPoints(TypeDescription description, MethodInfo[] methods)
 		{
-			MethodInfo[] methods = type.GetMethods ();
-
 			List<OrderedInjectionPoint> orderedInjectionPoints = new List<OrderedInjectionPoint> ();
 			foreach (MethodInfo method in methods) 
 			{

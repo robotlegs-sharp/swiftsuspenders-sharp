@@ -96,7 +96,7 @@ namespace swiftsuspenders
 		[Test]
 		public void MappingToProviderUsesProvidersResponse()
 		{
-			InjectionMapping otherConfig = new InjectionMapping(injector, typeof(ClazzExtension), null, typeof(ClazzExtension));
+			InjectionMapping otherConfig = new InjectionMapping(injector, new MappingId(typeof(ClazzExtension), null));
 			otherConfig.ToProvider(new TypeProvider(typeof(ClazzExtension)));
 			OtherMappingProvider otherMappingProvider = new OtherMappingProvider(otherConfig);
 			object returnedResponse = otherMappingProvider.Apply(null, injector, null);

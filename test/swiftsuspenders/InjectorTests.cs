@@ -682,7 +682,7 @@ namespace swiftsuspenders
 		[Test, ExpectedException(typeof(InjectorException))]
 		public void injector_throws_when_trying_to_create_mapping_for_same_type_from_pre_mapping_create_handler()
 		{
-			injector.PRE_MAPPING_CREATE += (Type mappedType, object mappedKey) => {
+			injector.PRE_MAPPING_CREATE += (MappingId mappingId) => {
 				injector.Map(typeof(Clazz));
 			};
 			injector.Map(typeof(Clazz));
@@ -691,7 +691,7 @@ namespace swiftsuspenders
 		[Test, ExpectedException(typeof(InjectorException))]
 		public void injector_throws_when_trying_to_create_mapping_for_same_type_from_post_mapping_create_handler()
 		{
-			injector.POST_MAPPING_CREATE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+			injector.POST_MAPPING_CREATE += (MappingId mappingId, InjectionMapping instanceType) => {
 				injector.Map(typeof(Clazz)).Locally();
 			};
 			injector.Map(typeof(Clazz));
@@ -741,32 +741,32 @@ namespace swiftsuspenders
 				};
 				break;
 			case "PRE_MAPPING_CREATE":
-				injector.PRE_MAPPING_CREATE += (Type mappedType, object mappedKey) => {
+				injector.PRE_MAPPING_CREATE += (MappingId mappingId) => {
 					receivedInjectorEvents.Add ("PRE_MAPPING_CREATE");
 				};
 				break;
 			case "POST_MAPPING_CREATE":
-				injector.POST_MAPPING_CREATE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+				injector.POST_MAPPING_CREATE += (MappingId mappingId, InjectionMapping instanceType) => {
 					receivedInjectorEvents.Add ("POST_MAPPING_CREATE");
 				};
 				break;
 			case "PRE_MAPPING_CHANGE":
-				injector.PRE_MAPPING_CHANGE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+				injector.PRE_MAPPING_CHANGE += (MappingId mappingId, InjectionMapping instanceType) => {
 					receivedInjectorEvents.Add ("PRE_MAPPING_CHANGE");
 				};
 				break;
 			case "POST_MAPPING_CHANGE":
-				injector.POST_MAPPING_CHANGE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+				injector.POST_MAPPING_CHANGE += (MappingId mappingId, InjectionMapping instanceType) => {
 					receivedInjectorEvents.Add ("POST_MAPPING_CHANGE");
 				};
 				break;
 			case "MAPPING_OVERRIDE":
-				injector.MAPPING_OVERRIDE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+				injector.MAPPING_OVERRIDE += (MappingId mappingId, InjectionMapping instanceType) => {
 					receivedInjectorEvents.Add ("MAPPING_OVERRIDE");
 				};
 				break;
 			case "POST_MAPPING_REMOVE":
-				injector.POST_MAPPING_REMOVE += (Type mappedType, object mappedKey) => {
+				injector.POST_MAPPING_REMOVE += (MappingId mappingId) => {
 					receivedInjectorEvents.Add ("POST_MAPPING_REMOVE");
 				};
 				break;
@@ -1106,8 +1106,7 @@ namespace swiftsuspenders
 			Assert.NotNull(injectee.GetDependency2(), "Instance of Class should have been injected for TwoParametersConstructorInjectee parameter");
 		}
 
-		//TODO: Make this pass by changing mappingid to struct
-//		[Test]
+		[Test]
 		public void inject_two_types_same_key()
 		{
 			string key = "key";
@@ -1120,6 +1119,7 @@ namespace swiftsuspenders
 			object returnValue1 = injector.GetInstance (typeof(Clazz), key);
 			object returnValue2 = injector.GetInstance (typeof(Clazz2), key);
 
+			Assert.AreNotSame (returnValue1, returnValue2);
 			Assert.AreEqual (clazz1, returnValue1);
 			Assert.AreEqual (clazz2, returnValue2);
 		}

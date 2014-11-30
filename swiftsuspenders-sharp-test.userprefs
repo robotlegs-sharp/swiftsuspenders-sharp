@@ -1,17 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="test\swiftsuspenders\InjectorTests.cs">
-    <Files>
-      <File FileName="test\swiftsuspenders\InjectorTests.cs" Line="42" Column="42" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="MonoDevelop.NUnit.TestPad">
         <State expanded="True">
           <Option id="ShowTestTime" value="True" />
           <Node name="swiftsuspenders-sharp-test" expanded="True">
             <Node name="swiftsuspenders" expanded="True">
-              <Node name="InjectorTests" expanded="True">
-                <Node name="injector_dispatches_MAPPING_OVERRIDE_event_after_mapping_type_twice" selected="True" />
+              <Node name="ChildInjectorTests" expanded="True" />
+              <Node name="DependencyProviderTests" expanded="True" />
+              <Node name="InjectionMappingTests" expanded="True" />
+              <Node name="InjectorTests" expanded="True" />
+              <Node name="SystemReflectorTests" expanded="True">
+                <Node name="ReflectorCorrectlyCreatesInjectionPointForOneNamedParamMethodInjection" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -20,7 +21,10 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\James\Freelance\swiftsuspenders-sharp\src\swiftsuspenders\Injector.cs" line="217" column="1" />
+      <Breakpoint file="C:\Users\James\Freelance\swiftsuspenders-sharp\src\swiftsuspenders\Injector.cs" line="446" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="src\swiftsuspenders\reflector\SystemReflector.cs" line="133" offsetX="760" offsetY="2112" expression="method" liveUpdate="False" />

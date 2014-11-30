@@ -71,6 +71,7 @@
     <Compile Include="src\swiftsuspenders\attribute\OrderedAttribute.cs" />
     <Compile Include="src\swiftsuspenders\attribute\PreDestroy.cs" />
     <Compile Include="src\swiftsuspenders\dependencyproviders\OtherMappingProvider.cs" />
+    <Compile Include="src\swiftsuspenders\mapping\MappingId.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

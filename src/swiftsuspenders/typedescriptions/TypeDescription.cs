@@ -1,6 +1,7 @@
 ﻿using System;
 using swiftsuspenders.errors;
 using System.Reflection;
+using swiftsuspenders.mapping;
 
 namespace swiftsuspenders.typedescriptions
 {
@@ -21,7 +22,7 @@ namespace swiftsuspenders.typedescriptions
 			return this;
 		}
 
-		public TypeDescription AddFieldInjection(object mappingId, FieldInfo fieldInfo, bool optional = false)
+		public TypeDescription AddFieldInjection(MappingId mappingId, FieldInfo fieldInfo, bool optional = false)
 		{
 			if (_postConstructAdded)
 				throw new InjectorException ("Can't add injection point after post construct method");
@@ -29,7 +30,7 @@ namespace swiftsuspenders.typedescriptions
 			return this;
 		}
 
-		public TypeDescription AddPropertyInjection(object mappingId, PropertyInfo propertyInfo, bool optional = false)
+		public TypeDescription AddPropertyInjection(MappingId mappingId, PropertyInfo propertyInfo, bool optional = false)
 		{
 			if (_postConstructAdded)
 				throw new InjectorException ("Can't add injection point after post construct method");

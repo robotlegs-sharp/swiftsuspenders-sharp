@@ -23,9 +23,7 @@ namespace swiftsuspenders.mapping
 		/* Private Properties                                                         */
 		/*============================================================================*/
 
-		private Type _type;
-		private object _key;
-		private object _mappingId;
+		private MappingId _mappingId;
 		private Injector _creatingInjector;
 		private bool _defaultProviderSet = false;
 
@@ -38,14 +36,12 @@ namespace swiftsuspenders.mapping
 		/*============================================================================*/
 		/* Constructor                                                                */
 		/*============================================================================*/
-		public InjectionMapping(Injector injector, Type type, object key, object mappingId)
+		public InjectionMapping(Injector injector, MappingId mappingId)
 		{
 			_creatingInjector = injector;
-			_type = type;
-			_key = key;
 			_mappingId = mappingId;
 			_defaultProviderSet = true;
-			MapProvider (new TypeProvider (type));
+			MapProvider (new TypeProvider (mappingId.type));
 		}
 
 		/*============================================================================*/
@@ -54,7 +50,7 @@ namespace swiftsuspenders.mapping
 
 		public UnsealedMapping AsSingleton(bool initializeImmediately = false)
 		{
-			ToSingleton(_type, initializeImmediately);
+			ToSingleton(_mappingId.type, initializeImmediately);
 			return this;
 		}
 
@@ -88,7 +84,7 @@ namespace swiftsuspenders.mapping
 		{
 			ToProvider(new SingletonProvider(type, _creatingInjector));
 			if (initializeImmediately) {
-				_creatingInjector.GetInstance(_type, _key);
+				_creatingInjector.GetInstance(_mappingId.type, _mappingId.key);
 			}
 			return this;
 		}
@@ -103,7 +99,7 @@ namespace swiftsuspenders.mapping
 					"If you have overridden this mapping intentionally you can use " +
 					"'injector.unmap()' prior to your replacement mapping in order to " +
 					"avoid seeing this message.");
-				_creatingInjector.DispatchMappingOverrideEvent (_type, _key, this);
+				_creatingInjector.DispatchMappingOverrideEvent (_mappingId, this);
 			}
 			DispatchPreChangeEvent();
 			_defaultProviderSet = false;
@@ -238,12 +234,12 @@ namespace swiftsuspenders.mapping
 
 		private void DispatchPreChangeEvent()
 		{
-			_creatingInjector.DispatchPreMappingChangeEvent (_type, _key, this);
+			_creatingInjector.DispatchPreMappingChangeEvent (_mappingId, this);
 		}
 
 		private void DispatchPostChangeEvent()
 		{
-			_creatingInjector.DispatchPostMappingChangeEvent (_type, _key, this);
+			_creatingInjector.DispatchPostMappingChangeEvent (_mappingId, this);
 		}
 	}
 }

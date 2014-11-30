@@ -34,21 +34,21 @@ namespace swiftsuspenders
 		[Test]
 		public void ConfigIsInstantiated()
 		{
-			InjectionMapping config = new InjectionMapping (injector, typeof(Clazz), null, "");
+			InjectionMapping config = new InjectionMapping (injector, new MappingId(typeof(Clazz), null));
 			Assert.IsInstanceOf<InjectionMapping>(config);
 		}
 
 		[Test]
 		public void MappingWithoutProviderEverSetUsesClassProvider()
 		{
-			InjectionMapping config = new InjectionMapping(injector, typeof(Clazz), null, "");
+			InjectionMapping config = new InjectionMapping(injector, new MappingId(typeof(Clazz), null));
 			Assert.IsInstanceOf<TypeProvider>(config.GetProvider());
 		}
 
 		[Test]
 		public void InjectionMappingAsSingletonMethodCreatesSingletonProvider()
 		{
-			InjectionMapping config = new InjectionMapping(injector, typeof(Clazz), null, "");
+			InjectionMapping config = new InjectionMapping(injector, new MappingId(typeof(Clazz), null));
 			config.AsSingleton();
 			Assert.IsInstanceOf<SingletonProvider>(config.GetProvider());
 		}
@@ -67,7 +67,7 @@ namespace swiftsuspenders
 		{
 			SingletonProvider provider1 = new SingletonProvider(typeof(Clazz), injector);
 			TypeProvider provider2 = new TypeProvider(typeof(Clazz));
-			InjectionMapping config = new InjectionMapping(injector, typeof(Clazz), null, "");
+			InjectionMapping config = new InjectionMapping(injector, new MappingId(typeof(Clazz), null));
 			config.ToProvider(provider1);
 			Assert.AreEqual (config.GetProvider (), provider1);
 			config.ToProvider(null);
@@ -78,7 +78,7 @@ namespace swiftsuspenders
 		[Test]
 		public void SealingAMappingMakesItSealed()
 		{
-			InjectionMapping config = new InjectionMapping(injector, typeof(Interface), null, "");
+			InjectionMapping config = new InjectionMapping(injector, new MappingId(typeof(Interface), null));
 			config.Seal();
 			Assert.True(config.isSealed);
 		}
@@ -86,7 +86,7 @@ namespace swiftsuspenders
 		[Test]
 		public void SealingAMappingMakesItUnchangable()
 		{
-			InjectionMapping config = new InjectionMapping(injector, typeof(Interface), null, "");
+			InjectionMapping config = new InjectionMapping(injector, new MappingId(typeof(Interface), null));
 			config.Seal();
 			List<MethodInfo> testMethods = new List<MethodInfo> ();
 			List<object[]> testMethodArguments = new List<object[]> ();
@@ -156,7 +156,7 @@ namespace swiftsuspenders
 		[Test]
 		public void SealReturnsAnUnsealingKeyObject()
 		{
-			InjectionMapping config = new InjectionMapping(injector, typeof(Interface), null, "");
+			InjectionMapping config = new InjectionMapping(injector, new MappingId(typeof(Interface), null));
 			Assert.NotNull(config.Seal ());
 		}
 
