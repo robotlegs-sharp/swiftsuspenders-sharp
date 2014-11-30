@@ -112,7 +112,7 @@ namespace swiftsuspenders
 			injector.Map(typeof(Clazz)).ToProvider(provider);
 			injector.InstantiateUnmapped(typeof(ClassInjectee));
 
-			Assert.AreEqual(typeof(ClassInjectee).AssemblyQualifiedName, provider.lastTargetClassName, "className stored in provider is fqn of ClassInjectee");
+			Assert.AreEqual(typeof(ClassInjectee).AssemblyQualifiedName, provider.lastTargetClassName, "ClassName stored in provider is not AssemblyQualifiedName of ClassInjectee");
 		}
 	}
 }

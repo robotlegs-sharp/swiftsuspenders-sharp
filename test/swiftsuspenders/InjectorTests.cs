@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using swiftsuspenders.support.injectees;
 using swiftsuspenders.support.types;
@@ -15,13 +16,13 @@ namespace swiftsuspenders
 	public class InjectorTests
 	{
 		private Injector injector;
-//		protected var receivedInjectorEvents : Array;
+		protected List<string> receivedInjectorEvents;
 
 		[SetUp]
 		public void setup()
 		{
 			injector = new Injector();
-//			receivedInjectorEvents = [];
+			receivedInjectorEvents = new List<string>();
 		}
 
 		[TearDown]
@@ -29,7 +30,7 @@ namespace swiftsuspenders
 		{
 			Injector.PurgeInjectionPointsCache();
 			injector = null;
-//			receivedInjectorEvents = null;
+			receivedInjectorEvents = null;
 		}
 
 		[Test]
@@ -548,202 +549,236 @@ namespace swiftsuspenders
 			childInjector.GetInstance<Interface>();
 		}
 
-//		[Test]
-//		public void injector_dispatches_POST_INSTANTIATE_event_during_instance_construction()
-//		{
-//			Assert.True(constructMappedTypeAndListenForEvent(injector.POST_INSTANTIATE));
-//		}
+		[Test]
+		public void injector_dispatches_POST_INSTANTIATE_event_during_instance_construction()
+		{
+			Assert.True(constructMappedTypeAndListenForEvent("POST_INSTANTIATE"));
+		}
 
-		/*
 		[Test]
 		public void injector_dispatches_PRE_CONSTRUCT_event_during_instance_construction()
 		{
-			assertThat(constructMappedTypeAndListenForEvent(InjectionEvent.PRE_CONSTRUCT), isTrue());
+			Assert.True(constructMappedTypeAndListenForEvent("PRE_CONSTRUCT"));
 		}
 
 		[Test]
 		public void injector_dispatches_POST_CONSTRUCT_event_after_instance_construction()
 		{
-			assertThat(constructMappedTypeAndListenForEvent(InjectionEvent.POST_CONSTRUCT), isTrue());
+			Assert.True(constructMappedTypeAndListenForEvent("POST_CONSTRUCT"));
 		}
 
 		[Test]
 		public void injector_events_after_instantiate_contain_created_instance()
 		{
-			function listener(event : InjectionEvent)
-			{
-				assertThat(event, hasPropertyWithValue('instance', isA(Clazz)));
-			}
 			injector.Map(typeof(Clazz));
-			injector.addEventListener(InjectionEvent.POST_INSTANTIATE, listener);
-			injector.addEventListener(InjectionEvent.PRE_CONSTRUCT, listener);
-			injector.addEventListener(InjectionEvent.POST_CONSTRUCT, listener);
-			const instance : Clazz = injector.GetInstance(Clazz);
+			injector.POST_INSTANTIATE += CheckNotNull;
+			injector.PRE_CONSTRUCT += CheckNotNull;
+			injector.POST_CONSTRUCT += CheckNotNull;
+			Clazz instance = injector.GetInstance<Clazz>();
+		}
+
+		private void CheckNotNull(object instance, Type type)
+		{
+			Assert.NotNull(instance);
 		}
 
 		[Test]
 		public void injectInto_dispatches_PRE_CONSTRUCT_event_during_object_construction()
 		{
-			assertThat(injectIntoInstanceAndListenForEvent(InjectionEvent.PRE_CONSTRUCT), isTrue());
+			Assert.True(injectIntoInstanceAndListenForEvent("PRE_CONSTRUCT"));
 		}
 
 		[Test]
 		public void injectInto_dispatches_POST_CONSTRUCT_event_during_object_construction()
 		{
-			assertThat(injectIntoInstanceAndListenForEvent(InjectionEvent.POST_CONSTRUCT), isTrue());
+			Assert.True(injectIntoInstanceAndListenForEvent("POST_CONSTRUCT"));
 		}
 
 		[Test]
 		public void injector_dispatches_PRE_MAPPING_CREATE_event_before_creating_new_mapping()
 		{
-			assertThat(createMappingAndListenForEvent(MappingEvent.PRE_MAPPING_CREATE));
+			Assert.True(createMappingAndListenForEvent("PRE_MAPPING_CREATE"));
 		}
 
 		[Test]
 		public void injector_dispatches_POST_MAPPING_CREATE_event_after_creating_new_mapping()
 		{
-			assertThat(createMappingAndListenForEvent(MappingEvent.POST_MAPPING_CREATE));
+			Assert.True(createMappingAndListenForEvent("POST_MAPPING_CREATE"));
 		}
 
 		[Test]
 		public void injector_dispatches_PRE_MAPPING_CHANGE_event_before_changing_mapping_provider()
 		{
 			injector.Map(typeof(Clazz));
-			listenToInjectorEvent(MappingEvent.PRE_MAPPING_CHANGE);
+			listenToInjectorEvent("PRE_MAPPING_CHANGE");
 			injector.Map(typeof(Clazz)).AsSingleton();
-			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.PRE_MAPPING_CHANGE));
+			Assert.AreEqual(lastEventFired(), "PRE_MAPPING_CHANGE");
 		}
 
 		[Test]
 		public void injector_dispatches_POST_MAPPING_CHANGE_event_after_changing_mapping_provider()
 		{
 			injector.Map(typeof(Clazz));
-			listenToInjectorEvent(MappingEvent.POST_MAPPING_CHANGE);
+			listenToInjectorEvent("POST_MAPPING_CHANGE");
 			injector.Map(typeof(Clazz)).AsSingleton();
-			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.POST_MAPPING_CHANGE));
+			Assert.AreEqual(lastEventFired(), "POST_MAPPING_CHANGE");
 		}
 
 		[Test]
 		public void injector_dispatches_PRE_MAPPING_CHANGE_event_before_changing_mapping_strength()
 		{
 			injector.Map(typeof(Clazz));
-			listenToInjectorEvent(MappingEvent.PRE_MAPPING_CHANGE);
+			listenToInjectorEvent("PRE_MAPPING_CHANGE");
 			injector.Map(typeof(Clazz)).Softly();
-			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.PRE_MAPPING_CHANGE));
+			Assert.AreEqual(lastEventFired(), "PRE_MAPPING_CHANGE");
 		}
 
 		[Test]
 		public void injector_dispatches_POST_MAPPING_CHANGE_event_after_changing_mapping_strength()
 		{
 			injector.Map(typeof(Clazz));
-			listenToInjectorEvent(MappingEvent.POST_MAPPING_CHANGE);
+			listenToInjectorEvent("POST_MAPPING_CHANGE");
 			injector.Map(typeof(Clazz)).Softly();
-			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.POST_MAPPING_CHANGE));
+			Assert.AreEqual(lastEventFired(), "POST_MAPPING_CHANGE");
+		}
+
+		[Test]
+		public void injector_dispatches_MAPPING_OVERRIDE_event_after_mapping_type_twice()
+		{
+			listenToInjectorEvent ("MAPPING_OVERRIDE");
+			injector.Map(typeof(Clazz)).AsSingleton();
+			Assert.AreNotEqual(lastEventFired (), "MAPPING_OVERRIDE");
+			injector.Map(typeof(Clazz)).ToValue(new Clazz());
+			Assert.AreEqual(lastEventFired (), "MAPPING_OVERRIDE");
 		}
 
 		[Test]
 		public void injector_dispatches_PRE_MAPPING_CHANGE_event_before_changing_mapping_scope()
 		{
 			injector.Map(typeof(Clazz));
-			listenToInjectorEvent(MappingEvent.PRE_MAPPING_CHANGE);
+			listenToInjectorEvent("PRE_MAPPING_CHANGE");
 			injector.Map(typeof(Clazz)).Locally();
-			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.PRE_MAPPING_CHANGE));
+			Assert.AreEqual(lastEventFired(), "PRE_MAPPING_CHANGE");
 		}
 
 		[Test]
 		public void injector_dispatches_POST_MAPPING_CHANGE_event_after_changing_mapping_scope()
 		{
 			injector.Map(typeof(Clazz));
-			listenToInjectorEvent(MappingEvent.POST_MAPPING_CHANGE);
+			listenToInjectorEvent("POST_MAPPING_CHANGE");
 			injector.Map(typeof(Clazz)).Locally();
-			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.POST_MAPPING_CHANGE));
+			Assert.AreEqual(lastEventFired(), "POST_MAPPING_CHANGE");
 		}
 
 		[Test]
 		public void injector_dispatches_POST_MAPPING_REMOVE_event_after_removing_mapping()
 		{
 			injector.Map(typeof(Clazz));
-			listenToInjectorEvent(MappingEvent.POST_MAPPING_REMOVE);
-			injector.Unmap(Clazz);
-			assertThat(receivedInjectorEvents.pop(), equalTo(MappingEvent.POST_MAPPING_REMOVE));
+			listenToInjectorEvent("POST_MAPPING_REMOVE");
+			injector.Unmap(typeof(Clazz));
+			Assert.AreEqual(lastEventFired(), "POST_MAPPING_REMOVE");
 		}
 
-		[Test]
+		[Test, ExpectedException(typeof(InjectorException))]
 		public void injector_throws_when_trying_to_create_mapping_for_same_type_from_pre_mapping_create_handler()
 		{
-			var errorThrown : Boolean;
-			injector.addEventListener(MappingEvent.PRE_MAPPING_CREATE,
-				function(event : MappingEvent) : void
-			{
-				try
-				{
-					injector.Map(typeof(Clazz));
-				}
-				catch (error : InjectorError)
-				{
-					errorThrown = true;
-				}
-			});
+			injector.PRE_MAPPING_CREATE += (Type mappedType, object mappedKey) => {
+				injector.Map(typeof(Clazz));
+			};
 			injector.Map(typeof(Clazz));
-			assertThat(errorThrown, isTrue());
 		}
 
-		[Test]
+		[Test, ExpectedException(typeof(InjectorException))]
 		public void injector_throws_when_trying_to_create_mapping_for_same_type_from_post_mapping_create_handler()
 		{
-			var errorThrown : Boolean;
-			injector.addEventListener(MappingEvent.POST_MAPPING_CREATE,
-				function(event : MappingEvent) : void
-				{
-					try
-					{
-						injector.Map(typeof(Clazz)).Locally();
-					}
-					catch (error : InjectorError)
-					{
-						errorThrown = true;
-					}
-				});
+			injector.POST_MAPPING_CREATE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+				injector.Map(typeof(Clazz)).Locally();
+			};
 			injector.Map(typeof(Clazz));
-			assertThat(errorThrown, isTrue());
 		}
-		*/
 
-//		private bool constructMappedTypeAndListenForEvent(Delegate eventType)
-//		{
-//			injector.Map(typeof(Clazz));
-//			listenToInjectorEvent(eventType);
-//			injector.GetInstance<Clazz>();
-//			return receivedInjectorEvents.pop() == eventType;
-//		}
-		
-		/*
-		private function injectIntoInstanceAndListenForEvent(eventType : String) : Boolean
+		private bool constructMappedTypeAndListenForEvent(string eventType)
 		{
-			const injectee : ClassInjectee = new ClassInjectee();
+			injector.Map(typeof(Clazz));
+			listenToInjectorEvent(eventType);
+			injector.GetInstance<Clazz>();
+			return lastEventFired() == eventType;
+		}
+
+		private bool injectIntoInstanceAndListenForEvent(string eventType)
+		{
+			ClassInjectee injectee = new ClassInjectee();
 			injector.Map(typeof(Clazz)).ToValue(new Clazz());
 			listenToInjectorEvent(eventType);
 			injector.InjectInto(injectee);
-			return receivedInjectorEvents.pop() == eventType;
+			return lastEventFired() == eventType;
 		}
 
-		private function createMappingAndListenForEvent(eventType : String) : Boolean
+		private bool createMappingAndListenForEvent(string eventType)
 		{
 			listenToInjectorEvent(eventType);
 			injector.Map(typeof(Clazz));
-			return receivedInjectorEvents.pop() == eventType;
+			return lastEventFired() == eventType;
 		}
-		*/
 
-//		private void listenToInjectorEvent(event eventType)
-//		{
-//			/*
-//			injector.addEventListener(eventType, function(event : Event) : void
-//			{
-//				receivedInjectorEvents.push(event.type);
-//			});
-//			*/
-//		}
+		private void listenToInjectorEvent(string eventType)
+		{
+			switch (eventType) 
+			{
+			case "POST_CONSTRUCT":
+				injector.POST_CONSTRUCT += (object instance, Type instanceType) => {
+					receivedInjectorEvents.Add ("POST_CONSTRUCT");
+				};
+				break;
+			case "PRE_CONSTRUCT":
+				injector.PRE_CONSTRUCT += (object instance, Type instanceType) => {
+					receivedInjectorEvents.Add ("PRE_CONSTRUCT");
+				};
+				break;
+			case "POST_INSTANTIATE":
+				injector.POST_INSTANTIATE += (object instance, Type instanceType) => {
+					receivedInjectorEvents.Add ("POST_INSTANTIATE");
+				};
+				break;
+			case "PRE_MAPPING_CREATE":
+				injector.PRE_MAPPING_CREATE += (Type mappedType, object mappedKey) => {
+					receivedInjectorEvents.Add ("PRE_MAPPING_CREATE");
+				};
+				break;
+			case "POST_MAPPING_CREATE":
+				injector.POST_MAPPING_CREATE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+					receivedInjectorEvents.Add ("POST_MAPPING_CREATE");
+				};
+				break;
+			case "PRE_MAPPING_CHANGE":
+				injector.PRE_MAPPING_CHANGE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+					receivedInjectorEvents.Add ("PRE_MAPPING_CHANGE");
+				};
+				break;
+			case "POST_MAPPING_CHANGE":
+				injector.POST_MAPPING_CHANGE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+					receivedInjectorEvents.Add ("POST_MAPPING_CHANGE");
+				};
+				break;
+			case "MAPPING_OVERRIDE":
+				injector.MAPPING_OVERRIDE += (Type mappedType, object mappedKey, InjectionMapping instanceType) => {
+					receivedInjectorEvents.Add ("MAPPING_OVERRIDE");
+				};
+				break;
+			case "POST_MAPPING_REMOVE":
+				injector.POST_MAPPING_REMOVE += (Type mappedType, object mappedKey) => {
+					receivedInjectorEvents.Add ("POST_MAPPING_REMOVE");
+				};
+				break;
+			}
+		}
+
+		private string lastEventFired()
+		{
+			if (receivedInjectorEvents.Count == 0)
+				return "";
+			return receivedInjectorEvents [receivedInjectorEvents.Count - 1];
+		}
 
 		// Hmm, optional parameters injection for provider
 //		[Test]
@@ -1069,6 +1104,24 @@ namespace swiftsuspenders
 				injector.InstantiateUnmapped<TwoParametersConstructorInjecteeWithConstructorInjectedDependencies>();
 			Assert.NotNull(injectee.GetDependency1(), "Instance of Class should have been injected for OneParameterConstructorInjectee parameter");
 			Assert.NotNull(injectee.GetDependency2(), "Instance of Class should have been injected for TwoParametersConstructorInjectee parameter");
+		}
+
+		//TODO: Make this pass by changing mappingid to struct
+//		[Test]
+		public void inject_two_types_same_key()
+		{
+			string key = "key";
+			Clazz clazz1 = new Clazz ();
+			Clazz2 clazz2 = new Clazz2 ();
+
+			injector.Map(typeof(Clazz), key).ToValue(clazz1);
+			injector.Map(typeof(Clazz2), key).ToValue(clazz2);
+
+			object returnValue1 = injector.GetInstance (typeof(Clazz), key);
+			object returnValue2 = injector.GetInstance (typeof(Clazz2), key);
+
+			Assert.AreEqual (clazz1, returnValue1);
+			Assert.AreEqual (clazz2, returnValue2);
 		}
 	}
 }

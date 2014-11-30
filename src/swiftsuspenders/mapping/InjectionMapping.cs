@@ -103,10 +103,7 @@ namespace swiftsuspenders.mapping
 					"If you have overridden this mapping intentionally you can use " +
 					"'injector.unmap()' prior to your replacement mapping in order to " +
 					"avoid seeing this message.");
-//				_creatingInjector.hasEventListener(MappingEvent.MAPPING_OVERRIDE)
-//				&& _creatingInjector.dispatchEvent(
-//					new MappingEvent(MappingEvent.MAPPING_OVERRIDE, _type, _name, this));
-				// TODO: Dispatch event
+				_creatingInjector.DispatchMappingOverrideEvent (_type, _key, this);
 			}
 			DispatchPreChangeEvent();
 			_defaultProviderSet = false;
@@ -241,18 +238,12 @@ namespace swiftsuspenders.mapping
 
 		private void DispatchPreChangeEvent()
 		{
-			// TODO: Implement events
-//			_creatingInjector.hasEventListener(MappingEvent.PRE_MAPPING_CHANGE)
-//			&& _creatingInjector.dispatchEvent(
-//				new MappingEvent(MappingEvent.PRE_MAPPING_CHANGE, _type, _name, this));
+			_creatingInjector.DispatchPreMappingChangeEvent (_type, _key, this);
 		}
 
 		private void DispatchPostChangeEvent()
 		{
-			// TODO: Implement events
-//			_creatingInjector.hasEventListener(MappingEvent.POST_MAPPING_CHANGE)
-//			&& _creatingInjector.dispatchEvent(
-//				new MappingEvent(MappingEvent.POST_MAPPING_CHANGE, _type, _name, this));
+			_creatingInjector.DispatchPostMappingChangeEvent (_type, _key, this);
 		}
 	}
 }
