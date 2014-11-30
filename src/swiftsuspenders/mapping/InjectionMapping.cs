@@ -58,6 +58,11 @@ namespace swiftsuspenders.mapping
 			return this;
 		}
 
+		public UnsealedMapping ToType<T>()
+		{
+			return ToType (typeof(T));
+		}
+
 		public UnsealedMapping ToType(Type type)
 		{
 			ToProvider(new TypeProvider(type));
@@ -72,6 +77,11 @@ namespace swiftsuspenders.mapping
 				_creatingInjector.InjectInto(value);
 			}
 			return this;
+		}
+
+		public UnsealedMapping ToSingleton<T>(bool initializeImmediately = false)
+		{
+			return ToSingleton (typeof(T));
 		}
 
 		public UnsealedMapping ToSingleton(Type type, bool initializeImmediately = false)

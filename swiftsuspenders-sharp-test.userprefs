@@ -1,43 +1,22 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="test\swiftsuspenders\InjectorTests.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="test\swiftsuspenders\ChildInjectorTests.cs">
     <Files>
-      <File FileName="test\swiftsuspenders\support\injectees\NamedInterfaceInjectee.cs" Line="21" Column="21" />
-      <File FileName="test\swiftsuspenders\InjectorTests.cs" Line="89" Column="89" />
-      <File FileName="src\swiftsuspenders\typedescriptions\TypeDescription.cs" Line="4" Column="4" />
+      <File FileName="test\swiftsuspenders\support\injectees\NamedInterfaceInjectee.cs" Line="1" Column="1" />
+      <File FileName="test\swiftsuspenders\InjectorTests.cs" Line="26" Column="26" />
+      <File FileName="src\swiftsuspenders\typedescriptions\TypeDescription.cs" Line="1" Column="1" />
       <File FileName="c:\Users\James\Freelance\swiftsuspenders-sharp\src\swiftsuspenders\typedescriptions\MethodBaseInjectionPoint.cs" Line="1" Column="1" />
+      <File FileName="test\swiftsuspenders\ChildInjectorTests.cs" Line="3" Column="3" />
     </Files>
     <Pads>
-      <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="swiftsuspenders-sharp" expanded="True">
-            <Node name="src" expanded="True">
-              <Node name="swiftsuspenders" expanded="True">
-                <Node name="dependencyproviders" expanded="True" />
-                <Node name="errors" expanded="True" />
-                <Node name="typedescriptions" expanded="True" />
-              </Node>
-            </Node>
-          </Node>
-          <Node name="swiftsuspenders-sharp-test" expanded="True">
-            <Node name="test" expanded="True">
-              <Node name="swiftsuspenders" expanded="True">
-                <Node name="support" expanded="True">
-                  <Node name="enums" expanded="True" />
-                  <Node name="injectees" expanded="True" />
-                  <Node name="providers" expanded="True" />
-                  <Node name="types" expanded="True" />
-                </Node>
-                <Node name="InjectionMappingTests.cs" selected="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
       <Pad Id="MonoDevelop.NUnit.TestPad">
-        <State expanded="True" selected="True">
+        <State expanded="True">
           <Option id="ShowTestTime" value="True" />
-          <Node name="swiftsuspenders-sharp-test" expanded="True" />
+          <Node name="swiftsuspenders-sharp-test" expanded="True">
+            <Node name="swiftsuspenders" expanded="True">
+              <Node name="ChildInjectorTests" selected="True" />
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>

@@ -41,6 +41,7 @@
   <ItemGroup>
     <Folder Include="test\" />
     <Folder Include="test\swiftsuspenders\support\providers\" />
+    <Folder Include="test\swiftsuspenders\support\injectees\childinjectors\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="test\swiftsuspenders\ReflectorTests.cs" />
@@ -87,6 +88,18 @@
     <Compile Include="test\swiftsuspenders\support\providers\ProviderThatCanDoInterfaces.cs" />
     <Compile Include="test\swiftsuspenders\support\providers\UnknownParametersUsingProvider.cs" />
     <Compile Include="test\swiftsuspenders\support\injectees\MultipleNamedSingletonsOfSameClassInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\ChildInjectorTests.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\ChildInjectorCreatingProvider.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\InjectorInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\NestedInjectorInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\LeftRobotFoot.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\NestedNestedInjectorInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\RightRobotFoot.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\RobotAnkle..cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\RobotBody.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\RobotFoot.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\RobotLeg.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\RobotToes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="swiftsuspenders-sharp.csproj">

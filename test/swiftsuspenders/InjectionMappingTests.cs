@@ -94,10 +94,10 @@ namespace swiftsuspenders
 			testMethods.Add(config.GetType ().GetMethod ("AsSingleton"));
 			testMethodArguments.Add (new object[1]{false});
 
-			testMethods.Add(config.GetType ().GetMethod ("ToSingleton"));
+			testMethods.Add(config.GetType ().GetMethod ("ToSingleton", new Type[]{typeof(Type), typeof(bool)}));
 			testMethodArguments.Add (new object[2]{typeof(Clazz), false});
 
-			testMethods.Add(config.GetType ().GetMethod ("ToType"));
+			testMethods.Add(config.GetType ().GetMethod ("ToType", new Type[]{typeof(Type)}));
 			testMethodArguments.Add (new object[1]{typeof(Clazz)});
 
 			testMethods.Add(config.GetType ().GetMethod ("ToValue"));
