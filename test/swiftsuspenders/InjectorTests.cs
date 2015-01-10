@@ -942,18 +942,20 @@ namespace swiftsuspenders
 			Assert.True(injector.Satisfies<Interface>());
 		}
 
-		//TODO: Add this test as we are checking for base types, note: object is mapped and shouldn't be
-//		[Test]
-//		public void satisfies_returns_false_for_unmapped_common_base_types()
-//		{
-//			injector.fallbackProvider = new MoodyProvider(true);
-//			Type[] baseTypes = new Type[]{typeof(bool), typeof(int), typeof(float), typeof(uint), typeof(object), typeof(double), typeof(string)};
-//			// yes, loops in tests are bad, but this test case is already 1000 lines long!
-//			for (uint i = 0; i < baseTypes.Length; i++)
-//			{
-//				Assert.False(injector.Satisfies(baseTypes[i]));
-//			}
-//		}
+		[Test]
+		public void satisfies_returns_false_for_unmapped_common_base_types()
+		{
+			injector.fallbackProvider = new MoodyProvider(true);
+			Type[] baseTypes = new Type[]{typeof(byte), typeof(sbyte), typeof(int), typeof(uint), typeof(short), typeof(ushort), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(char), typeof(bool), typeof(object), typeof(string), typeof(decimal)};
+
+			// yes, loops in tests are bad, but this test case is already 1000 lines long!
+			object key = new object();
+			for (uint i = 0; i < baseTypes.Length; i++)
+			{
+				Assert.False(injector.Satisfies(baseTypes[i]));
+				Assert.True (injector.Satisfies (baseTypes [i], key));
+			}
+		}
 		
 		[Test]
 		public void satisfiesDirectly_isTrue_if_fallbackProvider_satisifies()

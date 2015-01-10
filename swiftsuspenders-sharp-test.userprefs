@@ -1,25 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench>
-    <Pads>
-      <Pad Id="MonoDevelop.NUnit.TestPad">
-        <State expanded="True">
-          <Option id="ShowTestTime" value="True" />
-          <Node name="swiftsuspenders-sharp-test" expanded="True">
-            <Node name="swiftsuspenders" expanded="True">
-              <Node name="ChildInjectorTests" expanded="True" />
-              <Node name="DependencyProviderTests" expanded="True" />
-              <Node name="InjectionMappingTests" expanded="True" />
-              <Node name="InjectorTests" expanded="True" />
-              <Node name="SystemReflectorTests" expanded="True">
-                <Node name="ReflectorCorrectlyCreatesInjectionPointForOneNamedParamMethodInjection" selected="True" />
-              </Node>
-            </Node>
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\Users\James\Freelance\swiftsuspenders-sharp\src\swiftsuspenders\Injector.cs" line="217" column="1" />

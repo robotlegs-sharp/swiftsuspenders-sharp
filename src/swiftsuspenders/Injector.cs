@@ -11,19 +11,9 @@ namespace swiftsuspenders
 {
 	public class Injector
 	{
+		private static readonly Dictionary<Type, bool> BASE_TYPES = new Dictionary<Type, bool> {{typeof(byte), true}, {typeof(sbyte), true}, {typeof(int), true}, {typeof(uint), true}, {typeof(short), true}, {typeof(ushort), true}, {typeof(long), true}, {typeof(ulong), true}, {typeof(float), true}, {typeof(double), true}, {typeof(char), true}, {typeof(bool), true}, {typeof(object), true}, {typeof(string), true}, {typeof(decimal), true}};
+
 		private static Dictionary<Type, TypeDescription> INJECTION_POINTS_CACHE = new Dictionary<Type, TypeDescription>();
-
-		//TODO: Make basetypes better by making mappingId an class with key and type and then checking the type
-//		private static _baseTypes:Array = initBaseTypeMappingIds(
-//			[Object, Array, Class, Function, Boolean, Number, int, uint, String]);
-
-//		private static function initBaseTypeMappingIds(types : Array) : Array
-//		{
-//			return types.map(function(type : Class, index : uint, list : Array) : String
-//				{
-//					return getQualifiedClassName(type) + '|';
-//				});
-		//		}
 
 		/*============================================================================*/
 		/* Events and Delegates                                                       */
@@ -166,10 +156,25 @@ namespace swiftsuspenders
 				POST_MAPPING_REMOVE (mappingId);
 		}
 
+		/// <summary>
+		/// Indicates whether the injector can supply a response for the specified dependency either
+		/// by using a mapping of its own or by querying one of its ancestor injectors.
+		/// </summary>
+		/// <returns><c>true</c>, if the dependency can be satisfied,, <c>false</c> if not.</returns>
+		/// <param name="key">The name of the dependency under query</param>
+		/// <typeparam name="T">The type of the dependency under query</typeparam>
 		public bool Satisfies<T>(object key = null)
 		{
 			return Satisfies (typeof(T), key);
 		}
+
+		/// <summary>
+		/// Indicates whether the injector can supply a response for the specified dependency either
+		/// by using a mapping of its own or by querying one of its ancestor injectors.
+		/// </summary>
+		/// <param name="key">The name of the dependency under query</param>
+		/// <typeparam name="T">The type of the dependency under query</typeparam>
+		/// <returns><c>true</c>, if the dependency can be satisfied,, <c>false</c> if not.</returns>
 
 		public bool Satisfies(Type type, object key = null)
 		{
@@ -177,11 +182,31 @@ namespace swiftsuspenders
 			return GetProvider(mappingId, true) != null;
 		}
 
+		/// <summary>
+		/// Indicates whether the injector can directly supply a response for the specified
+		/// dependency.
+		/// 
+		/// <p>In contrast to <code>#satisfies()</code>, <code>satisfiesDirectly</code> only informs
+		/// about mappings on this injector itself, without querying its ancestor injectors.</p>
+		/// </summary>
+		/// <returns><c>true</c>, if the dependency can be satisfied,, <c>false</c> if not.</returns>
+		/// <param name="key">The name of the dependency under query</param>
+		/// <typeparam name="T">The type of the dependency under query</typeparam>
 		public bool SatisfiesDirectly<T>(object key = null)
 		{
 			return SatisfiesDirectly (typeof(T), key);
 		}
 
+		/// <summary>
+		/// Indicates whether the injector can directly supply a response for the specified
+		/// dependency.
+		/// 
+		/// <p>In contrast to <code>#satisfies()</code>, <code>satisfiesDirectly</code> only informs
+		/// about mappings on this injector itself, without querying its ancestor injectors.</p>
+		/// </summary>
+		/// <returns><c>true</c>, if the dependency can be satisfied,, <c>false</c> if not.</returns>
+		/// <param name="type">The type of the dependency under query</param>
+		/// <param name="key">The name of the dependency under query</param>
 		public bool SatisfiesDirectly(Type type, object key = null)
 		{
 			return HasDirectMapping(type, key)
@@ -212,7 +237,6 @@ namespace swiftsuspenders
 
 		public void InjectInto(object target)
 		{
-//			const type : Class = _reflector.getClass(target);
 			Type type = target.GetType();
 			ApplyInjectionPoints(target, type, _typeDescriptor.GetDescription(type));
 		}
@@ -419,12 +443,10 @@ namespace swiftsuspenders
 		private DependencyProvider GetDefaultProvider(
 			MappingId mappingId, bool consultParents)
 		{
-			//No meaningful way to automatically create base types without names
-			//TODD: Make the basetypes check work
-//			if (_baseTypes.indexOf(mappingId) > -1)
-//			{
-//				return null;
-//			}
+			if (mappingId.key == null && BASE_TYPES.ContainsKey (mappingId.type))
+			{
+				return null;
+			}
 
 			if (_fallbackProvider != null && _fallbackProvider.PrepareNextRequest(mappingId))
 			{
