@@ -19,27 +19,27 @@ namespace swiftsuspenders
 		/* Events and Delegates                                                       */
 		/*============================================================================*/
 
-		public event MappingDelegate PRE_MAPPING_CREATE;
+		public event MappingDelegate PreMappingCreate;
 
-		public event InjectionMappingDelegate POST_MAPPING_CREATE;
+		public event InjectionMappingDelegate PostMappingCreate;
 
-		public event InjectionMappingDelegate PRE_MAPPING_CHANGE;
+		public event InjectionMappingDelegate PreMappingChange;
 
-		public event InjectionMappingDelegate POST_MAPPING_CHANGE;
+		public event InjectionMappingDelegate PostMappingChange;
 
-		public event MappingDelegate POST_MAPPING_REMOVE;
+		public event MappingDelegate PostMappingRemove;
 
-		public event InjectionMappingDelegate MAPPING_OVERRIDE;
+		public event InjectionMappingDelegate MappingOverride;
 
 		public delegate void InjectionMappingDelegate(MappingId mappingId, InjectionMapping instanceType);
 
 		public delegate void MappingDelegate(MappingId mappingId);
 
-		public event InjectionDelegate POST_INSTANTIATE;
+		public event InjectionDelegate PostInstantiate;
 
-		public event InjectionDelegate PRE_CONSTRUCT;
+		public event InjectionDelegate PreConstruct;
 
-		public event InjectionDelegate POST_CONSTRUCT;
+		public event InjectionDelegate PostConstruct;
 
 		public delegate void InjectionDelegate(object instance, Type instanceType);
 
@@ -152,8 +152,8 @@ namespace swiftsuspenders
 			mapping.GetProvider().Destroy();
 			_mappings.Remove (mappingId);
 			providerMappings.Remove (mappingId);
-			if (POST_MAPPING_REMOVE != null)
-				POST_MAPPING_REMOVE (mappingId);
+			if (PostMappingRemove != null)
+				PostMappingRemove (mappingId);
 		}
 
 		/// <summary>
@@ -296,8 +296,8 @@ namespace swiftsuspenders
 			}
 			TypeDescription description = _typeDescriptor.GetDescription(type);
 			object instance = description.ctor.CreateInstance(type, this);
-			if (POST_INSTANTIATE != null)
-				POST_INSTANTIATE (instance, type);
+			if (PostInstantiate != null)
+				PostInstantiate (instance, type);
 			ApplyInjectionPoints(instance, type, description);
 			return instance;
 		}
@@ -386,20 +386,20 @@ namespace swiftsuspenders
 
 		public void DispatchPreMappingChangeEvent(MappingId mappingId, InjectionMapping injectionMapping)
 		{
-			if (PRE_MAPPING_CHANGE != null)
-				PRE_MAPPING_CHANGE (mappingId, injectionMapping);
+			if (PreMappingChange != null)
+				PreMappingChange (mappingId, injectionMapping);
 		}
 
 		public void DispatchPostMappingChangeEvent(MappingId mappingId, InjectionMapping injectionMapping)
 		{
-			if (POST_MAPPING_CHANGE != null)
-				POST_MAPPING_CHANGE (mappingId, injectionMapping);
+			if (PostMappingChange != null)
+				PostMappingChange (mappingId, injectionMapping);
 		}
 
 		public void DispatchMappingOverrideEvent(MappingId mappingId, InjectionMapping injectionMapping)
 		{
-			if (MAPPING_OVERRIDE != null)
-				MAPPING_OVERRIDE (mappingId, injectionMapping);
+			if (MappingOverride != null)
+				MappingOverride (mappingId, injectionMapping);
 		}
 
 		private bool CanBeInstantiated(Type type)
@@ -470,16 +470,16 @@ namespace swiftsuspenders
 
 			_mappingsInProcess [mappingId] = true;
 
-			if (PRE_MAPPING_CREATE != null)
-				PRE_MAPPING_CREATE (mappingId);
+			if (PreMappingCreate != null)
+				PreMappingCreate (mappingId);
 
 			InjectionMapping mapping = new InjectionMapping (this, mappingId);
 			_mappings [mappingId] = mapping;
 
 			object sealKey = mapping.Seal ();
 
-			if (POST_MAPPING_CREATE != null)
-				POST_MAPPING_CREATE (mappingId, mapping);
+			if (PostMappingCreate != null)
+				PostMappingCreate (mappingId, mapping);
 
 			_mappingsInProcess.Remove (mappingId);
 			mapping.Unseal (sealKey);
@@ -490,8 +490,8 @@ namespace swiftsuspenders
 			object target, Type targetType, TypeDescription description)
 		{
 			InjectionPoint injectionPoint = description.injectionPoints;
-			if (PRE_CONSTRUCT != null)
-				PRE_CONSTRUCT (target, targetType);
+			if (PreConstruct != null)
+				PreConstruct (target, targetType);
 			while (injectionPoint != null)
 			{
 				injectionPoint.ApplyInjection(target, targetType, this);
@@ -501,8 +501,8 @@ namespace swiftsuspenders
 			{
 				_managedObjects[target] = target;
 			}
-			if (POST_CONSTRUCT != null)
-				POST_CONSTRUCT (target, targetType);
+			if (PostConstruct != null)
+				PostConstruct (target, targetType);
 		}
 
 		public static void PurgeInjectionPointsCache()

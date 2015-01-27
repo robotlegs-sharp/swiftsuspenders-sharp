@@ -571,9 +571,9 @@ namespace swiftsuspenders
 		public void injector_events_after_instantiate_contain_created_instance()
 		{
 			injector.Map(typeof(Clazz));
-			injector.POST_INSTANTIATE += CheckNotNull;
-			injector.PRE_CONSTRUCT += CheckNotNull;
-			injector.POST_CONSTRUCT += CheckNotNull;
+			injector.PostInstantiate += CheckNotNull;
+			injector.PreConstruct += CheckNotNull;
+			injector.PostConstruct += CheckNotNull;
 			Clazz instance = injector.GetInstance<Clazz>();
 		}
 
@@ -682,7 +682,7 @@ namespace swiftsuspenders
 		[Test, ExpectedException(typeof(InjectorException))]
 		public void injector_throws_when_trying_to_create_mapping_for_same_type_from_pre_mapping_create_handler()
 		{
-			injector.PRE_MAPPING_CREATE += (MappingId mappingId) => {
+			injector.PreMappingCreate += (MappingId mappingId) => {
 				injector.Map(typeof(Clazz));
 			};
 			injector.Map(typeof(Clazz));
@@ -691,7 +691,7 @@ namespace swiftsuspenders
 		[Test, ExpectedException(typeof(InjectorException))]
 		public void injector_throws_when_trying_to_create_mapping_for_same_type_from_post_mapping_create_handler()
 		{
-			injector.POST_MAPPING_CREATE += (MappingId mappingId, InjectionMapping instanceType) => {
+			injector.PostMappingCreate += (MappingId mappingId, InjectionMapping instanceType) => {
 				injector.Map(typeof(Clazz)).Locally();
 			};
 			injector.Map(typeof(Clazz));
@@ -726,47 +726,47 @@ namespace swiftsuspenders
 			switch (eventType) 
 			{
 			case "POST_CONSTRUCT":
-				injector.POST_CONSTRUCT += (object instance, Type instanceType) => {
+				injector.PostConstruct += (object instance, Type instanceType) => {
 					receivedInjectorEvents.Add ("POST_CONSTRUCT");
 				};
 				break;
 			case "PRE_CONSTRUCT":
-				injector.PRE_CONSTRUCT += (object instance, Type instanceType) => {
+				injector.PreConstruct += (object instance, Type instanceType) => {
 					receivedInjectorEvents.Add ("PRE_CONSTRUCT");
 				};
 				break;
 			case "POST_INSTANTIATE":
-				injector.POST_INSTANTIATE += (object instance, Type instanceType) => {
+				injector.PostInstantiate += (object instance, Type instanceType) => {
 					receivedInjectorEvents.Add ("POST_INSTANTIATE");
 				};
 				break;
 			case "PRE_MAPPING_CREATE":
-				injector.PRE_MAPPING_CREATE += (MappingId mappingId) => {
+				injector.PreMappingCreate += (MappingId mappingId) => {
 					receivedInjectorEvents.Add ("PRE_MAPPING_CREATE");
 				};
 				break;
 			case "POST_MAPPING_CREATE":
-				injector.POST_MAPPING_CREATE += (MappingId mappingId, InjectionMapping instanceType) => {
+				injector.PostMappingCreate += (MappingId mappingId, InjectionMapping instanceType) => {
 					receivedInjectorEvents.Add ("POST_MAPPING_CREATE");
 				};
 				break;
 			case "PRE_MAPPING_CHANGE":
-				injector.PRE_MAPPING_CHANGE += (MappingId mappingId, InjectionMapping instanceType) => {
+				injector.PreMappingChange += (MappingId mappingId, InjectionMapping instanceType) => {
 					receivedInjectorEvents.Add ("PRE_MAPPING_CHANGE");
 				};
 				break;
 			case "POST_MAPPING_CHANGE":
-				injector.POST_MAPPING_CHANGE += (MappingId mappingId, InjectionMapping instanceType) => {
+				injector.PostMappingChange += (MappingId mappingId, InjectionMapping instanceType) => {
 					receivedInjectorEvents.Add ("POST_MAPPING_CHANGE");
 				};
 				break;
 			case "MAPPING_OVERRIDE":
-				injector.MAPPING_OVERRIDE += (MappingId mappingId, InjectionMapping instanceType) => {
+				injector.MappingOverride += (MappingId mappingId, InjectionMapping instanceType) => {
 					receivedInjectorEvents.Add ("MAPPING_OVERRIDE");
 				};
 				break;
 			case "POST_MAPPING_REMOVE":
-				injector.POST_MAPPING_REMOVE += (MappingId mappingId) => {
+				injector.PostMappingRemove += (MappingId mappingId) => {
 					receivedInjectorEvents.Add ("POST_MAPPING_REMOVE");
 				};
 				break;
