@@ -274,12 +274,7 @@ namespace swiftsuspenders
 
 		public object GetOrCreateNewInstance(Type type)
 		{
-			object instance = null;
-			if (Satisfies (type))
-				instance = type;
-			if (instance == null)
-				instance = InstantiateUnmapped (type);
-			return instance;
+			return Satisfies (type) ? GetInstance (type) : InstantiateUnmapped (type);
 		}
 
 		public T InstantiateUnmapped<T>()

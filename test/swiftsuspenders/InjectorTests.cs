@@ -1043,6 +1043,17 @@ namespace swiftsuspenders
 		}
 
 		[Test]
+		public void getOrCreateNewInstance_provides_mapped_value_where_mapping_exists_to_type()
+		{
+			injector.Map(typeof(Interface)).ToType(typeof(Clazz));
+			object instance1 = injector.GetOrCreateNewInstance(typeof(Interface));
+			object instance2 = injector.GetOrCreateNewInstance(typeof(Interface));
+			Assert.That (instance1, Is.InstanceOf<Interface> ());
+			Assert.That (instance2, Is.InstanceOf<Interface> ());
+			Assert.That (instance1, Is.Not.EqualTo (instance2));
+		}
+
+		[Test]
 		public void satisfies_doesnt_use_fallbackProvider_from_ancestors_if_blockParentFallbackProvider_is_set()
 		{
 			injector.fallbackProvider = new ProviderThatCanDoInterfaces(typeof(Clazz));
