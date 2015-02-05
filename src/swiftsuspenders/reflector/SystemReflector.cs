@@ -44,7 +44,10 @@ namespace swiftsuspenders.reflector
 				}
 
 				if (constructor.GetParameters ().Length > maxParameters)
+				{
 					constructorToInject = constructor;
+					maxParameters = constructor.GetParameters ().Length;
+				}
 			}
 			if (constructorToInject != null)
 				description.ctor = new ConstructorInjectionPoint (constructorToInject, keys);

@@ -88,6 +88,17 @@ namespace swiftsuspenders
 		}
 
 		[Test]
+		public void map_value_as_base_type()
+		{
+			ClazzExtension original = new ClazzExtension ();
+			injector.Map (typeof(Clazz)).ToValue (original);
+			Assert.That(injector.HasDirectMapping(typeof(Clazz)), Is.True);
+			Clazz baseType = injector.GetOrCreateNewInstance<Clazz> ();
+			Assert.That (baseType, Is.InstanceOf<Clazz>());
+			Assert.That (baseType, Is.EqualTo(original));
+		}
+
+		[Test]
 		public void map_falsy_value()
 		{
 			StringInjectee injectee = new StringInjectee();
@@ -1135,6 +1146,40 @@ namespace swiftsuspenders
 			Assert.AreNotSame (returnValue1, returnValue2);
 			Assert.AreEqual (clazz1, returnValue1);
 			Assert.AreEqual (clazz2, returnValue2);
+		}
+
+		[Test]
+		public void inject_with_multiple_construtors_picks_most_number_of_arguments()
+		{
+			injector.Map (typeof(MultipleConstructorInjectee)).AsSingleton();
+			MultipleConstructorInjectee value = injector.GetInstance (typeof(MultipleConstructorInjectee)) as MultipleConstructorInjectee;
+			Assert.That (value.constructorArguments, Is.EqualTo (5));
+		}
+
+		[Test]
+		public void inject_with_multiple_construtors_uses_defaults_if_not_mapped()
+		{
+			injector.Map (typeof(MultipleConstructorInjectee)).AsSingleton();
+			MultipleConstructorInjectee value = injector.GetInstance (typeof(MultipleConstructorInjectee)) as MultipleConstructorInjectee;
+			Assert.That (value.value1, Is.EqualTo (1));
+			Assert.That (value.value2, Is.EqualTo ("arg"));
+			Assert.That (value.value3, Is.EqualTo (5));
+			Assert.That (value.value4, Is.EqualTo (10f));
+			Assert.That (value.value5, Is.EqualTo ("anotherarg"));
+		}
+
+		[Test]
+		public void inject_with_multiple_construtors_uses_mapped_values()
+		{
+			injector.Map (typeof(string)).ToValue ("test");
+			injector.Map (typeof(int)).ToValue (888);
+			injector.Map (typeof(MultipleConstructorInjectee)).AsSingleton();
+			MultipleConstructorInjectee value = injector.GetInstance (typeof(MultipleConstructorInjectee)) as MultipleConstructorInjectee;
+			Assert.That (value.value1, Is.EqualTo (888));
+			Assert.That (value.value2, Is.EqualTo ("test"));
+			Assert.That (value.value3, Is.EqualTo (888));
+			Assert.That (value.value4, Is.EqualTo (10f));
+			Assert.That (value.value5, Is.EqualTo ("test"));
 		}
 	}
 }

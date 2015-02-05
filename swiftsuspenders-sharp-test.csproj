@@ -102,6 +102,7 @@
     <Compile Include="test\swiftsuspenders\support\injectees\childinjectors\RobotToes.cs" />
     <Compile Include="test\swiftsuspenders\DependencyProviderTests.cs" />
     <Compile Include="test\swiftsuspenders\support\types\ClazzExtension.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\MultipleConstructorInjectee.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="swiftsuspenders-sharp.csproj">
