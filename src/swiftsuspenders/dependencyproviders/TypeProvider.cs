@@ -5,6 +5,9 @@ namespace swiftsuspenders.dependencyproviders
 {
 	public class TypeProvider : DependencyProvider
 	{
+		public event Action<DependencyProvider, object> PostApply;
+		public event Action<DependencyProvider, object> PreDestroy;
+
 		private Type _responseType;
 
 		public TypeProvider (Type responseType)
@@ -14,12 +17,20 @@ namespace swiftsuspenders.dependencyproviders
 
 		public object Apply (Type targetType, Injector activeInjector, Dictionary<string, object> injectParameters)
 		{
-			return activeInjector.InstantiateUnmapped(_responseType);
+			object instance = activeInjector.InstantiateUnmapped(_responseType);
+			if (PostApply != null) 
+			{
+				PostApply(this, instance);
+			}
+			return instance;
 		}
 
 		public void Destroy ()
 		{
-		
+			if (PreDestroy != null) 
+			{
+				PreDestroy(this, null);
+			}
 		}
 	}
 }

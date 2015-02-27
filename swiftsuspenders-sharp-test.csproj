@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>swiftsuspenderssharptest</RootNamespace>
     <AssemblyName>swiftsuspenders-sharp-test</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>

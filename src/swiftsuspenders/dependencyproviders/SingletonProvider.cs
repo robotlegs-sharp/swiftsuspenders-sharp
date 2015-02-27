@@ -6,6 +6,9 @@ namespace swiftsuspenders.dependencyproviders
 {
 	public class SingletonProvider : DependencyProvider
 	{
+		public event Action<DependencyProvider, object> PostApply;
+		public event Action<DependencyProvider, object> PreDestroy;
+
 		private Type _responseType;
 		private Injector _creatingInjector;
 		private object _response;
@@ -21,11 +24,18 @@ namespace swiftsuspenders.dependencyproviders
 		{
 			if (_response == null)
 				_response = CreateResponse (_creatingInjector);
+
+			if (PostApply != null)
+				PostApply (this, _response);
+
 			return _response;
 		}
 
 		public void Destroy ()
 		{
+			if (PreDestroy != null)
+				PreDestroy (this, _response);
+
 			_destroyed = true;
 			if (_response != null && _creatingInjector != null && _creatingInjector.HasManagedInstance(_response))
 			{

@@ -5,14 +5,25 @@ namespace swiftsuspenders.support.injectees.childinjectors
 {
 	public class ChildInjectorCreatingProvider : DependencyProvider
 	{
+		public event Action<DependencyProvider, object> PostApply;
+		public event Action<DependencyProvider, object> PreDestroy;
+
 		public object Apply (Type targetType, Injector activeInjector, System.Collections.Generic.Dictionary<string, object> injectParameters)
 		{
-			return activeInjector.CreateChildInjector();
+			object instance = activeInjector.CreateChildInjector();
+			if (PostApply != null)
+			{
+				PostApply(this, instance);
+			}
+			return instance;
 		}
 
 		public void Destroy ()
 		{
-			throw new NotImplementedException ();
+			if (PreDestroy != null) 
+			{
+				PreDestroy (this, null);
+			}
 		}
 	}
 }
