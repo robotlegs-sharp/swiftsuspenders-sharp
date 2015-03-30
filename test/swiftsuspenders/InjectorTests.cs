@@ -36,7 +36,6 @@ namespace swiftsuspenders
 		[Test]
 		public void unmap_removes_mapping()
 		{
-			InterfaceInjectee injectee = new InterfaceInjectee();
 			Clazz value = new Clazz();
 			injector.Map(typeof(Interface)).ToValue(value);
 			Assert.True(injector.Satisfies(typeof(Interface)));
@@ -585,7 +584,7 @@ namespace swiftsuspenders
 			injector.PostInstantiate += CheckNotNull;
 			injector.PreConstruct += CheckNotNull;
 			injector.PostConstruct += CheckNotNull;
-			Clazz instance = injector.GetInstance<Clazz>();
+			injector.GetInstance<Clazz>();
 		}
 
 		private void CheckNotNull(object instance, Type type)

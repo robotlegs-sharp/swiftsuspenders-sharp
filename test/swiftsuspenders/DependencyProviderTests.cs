@@ -90,7 +90,7 @@ namespace swiftsuspenders
 		{
 			SingletonProvider provider = new SingletonProvider(typeof(Clazz), injector);
 			provider.Destroy();
-			Clazz singleton = provider.Apply(null, injector, null) as Clazz;
+			provider.Apply(null, injector, null);
 		}
 
 		[Test]

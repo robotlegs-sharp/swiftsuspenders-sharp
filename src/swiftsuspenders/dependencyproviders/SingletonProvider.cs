@@ -6,12 +6,40 @@ namespace swiftsuspenders.dependencyproviders
 {
 	public class SingletonProvider : DependencyProvider
 	{
-		public event Action<DependencyProvider, object> PostApply;
-		public event Action<DependencyProvider, object> PreDestroy;
+		public event Action<DependencyProvider, object> PostApply
+		{
+			add
+			{
+				_postApply += value;
+			}
+			remove
+			{
+				_postApply -= value;
+			}
+		}
+
+		public event Action<DependencyProvider, object> PreDestroy
+		{
+			add
+			{
+				_preDestroy += value;
+			}
+			remove
+			{
+				_preDestroy -= value;
+			}
+		}
+		
+		private Action<DependencyProvider, object> _postApply;
+		
+		private Action<DependencyProvider, object> _preDestroy;
 
 		private Type _responseType;
+
 		private Injector _creatingInjector;
+
 		private object _response;
+
 		private bool _destroyed;
 
 		public SingletonProvider(Type responseType, Injector creatingInjector)
@@ -25,16 +53,16 @@ namespace swiftsuspenders.dependencyproviders
 			if (_response == null)
 				_response = CreateResponse (_creatingInjector);
 
-			if (PostApply != null)
-				PostApply (this, _response);
+			if (_postApply != null)
+				_postApply (this, _response);
 
 			return _response;
 		}
 
 		public void Destroy ()
 		{
-			if (PreDestroy != null)
-				PreDestroy (this, _response);
+			if (_preDestroy != null)
+				_preDestroy (this, _response);
 
 			_destroyed = true;
 			if (_response != null && _creatingInjector != null && _creatingInjector.HasManagedInstance(_response))

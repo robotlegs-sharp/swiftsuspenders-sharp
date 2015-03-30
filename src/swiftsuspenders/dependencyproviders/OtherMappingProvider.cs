@@ -6,9 +6,32 @@ namespace swiftsuspenders.dependencyproviders
 {
 	public class OtherMappingProvider : DependencyProvider
 	{
-		public event Action<DependencyProvider, object> PostApply;
-
-		public event Action<DependencyProvider, object> PreDestroy;
+		public event Action<DependencyProvider, object> PostApply
+		{
+			add
+			{
+				_postApply += value;
+			}
+			remove
+			{
+				_postApply -= value;
+			}
+		}
+		
+		public event Action<DependencyProvider, object> PreDestroy
+		{
+			add
+			{
+				_preDestroy += value;
+			}
+			remove
+			{
+				_preDestroy -= value;
+			}
+		}
+		private Action<DependencyProvider, object> _postApply;
+		
+		private Action<DependencyProvider, object> _preDestroy;
 
 		private InjectionMapping _otherMapping;
 
@@ -20,18 +43,18 @@ namespace swiftsuspenders.dependencyproviders
 		public object Apply (Type targetType, Injector activeInjector, Dictionary<string, object> injectParameters)
 		{
 			object instance = _otherMapping.GetProvider ().Apply (targetType, activeInjector, injectParameters);
-			if (PostApply != null)
+			if (_postApply != null)
 			{
-				PostApply(this, instance);
+				_postApply(this, instance);
 			}
 			return instance;
 		}
 
 		public void Destroy ()
 		{
-			if (PreDestroy != null) 
+			if (_preDestroy != null) 
 			{
-				PreDestroy(this, null);
+				_preDestroy(this, null);
 			}
 		}
 	}

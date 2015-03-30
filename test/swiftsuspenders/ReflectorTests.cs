@@ -33,6 +33,18 @@ namespace swiftsuspenders
 		}
 
 		[Test]
+		public void ReflectorGetsOptionalInCtorInjectionPoint()
+		{
+			ConstructorInjectionPoint injectionPoint = reflector.DescribeInjections (typeof(OptionalConstructorInjectee)).ctor;
+			string value2 = "Value2";
+			Assert.That (injectionPoint, Is.InstanceOf<ConstructorInjectionPoint> ());
+			injector.Map (typeof(string)).ToValue (value2);
+			OptionalConstructorInjectee injectee = injectionPoint.CreateInstance (typeof(OptionalConstructorInjectee), injector) as OptionalConstructorInjectee;
+			Assert.That (injectee.param1, Is.EqualTo (0));
+			Assert.That (injectee.param2, Is.EqualTo (value2));
+		}
+
+		[Test]
 		public void ReflectorCorrectlyCreatesInjectionPointForUnnamedPropertyInjection()
 		{
 			TypeDescription description = reflector.DescribeInjections(typeof(InterfaceInjectee));

@@ -5,8 +5,33 @@ namespace swiftsuspenders.dependencyproviders
 {
 	public class ValueProvider : DependencyProvider
 	{
-		public event Action<DependencyProvider, object> PostApply;
-		public event Action<DependencyProvider, object> PreDestroy;
+		public event Action<DependencyProvider, object> PostApply
+		{
+			add
+			{
+				_postApply += value;
+			}
+			remove
+			{
+				_postApply -= value;
+			}
+		}
+		
+		public event Action<DependencyProvider, object> PreDestroy
+		{
+			add
+			{
+				_preDestroy += value;
+			}
+			remove
+			{
+				_preDestroy -= value;
+			}
+		}
+		
+		private Action<DependencyProvider, object> _postApply;
+		
+		private Action<DependencyProvider, object> _preDestroy;
 
 		private object _value;
 		private Injector _creatingInjector;
@@ -19,18 +44,18 @@ namespace swiftsuspenders.dependencyproviders
 
 		public object Apply (Type targetType, Injector activeInjector, Dictionary<string, object> injectParameters)
 		{
-			if (PostApply != null) 
+			if (_postApply != null) 
 			{
-				PostApply(this, _value);
+				_postApply(this, _value);
 			}
 			return _value;
 		}
 
 		public virtual void Destroy ()
 		{
-			if (PreDestroy != null) 
+			if (_preDestroy != null) 
 			{
-				PreDestroy(this, _value);
+				_preDestroy(this, _value);
 			}
 			if (_value != null && _creatingInjector != null && _creatingInjector.HasManagedInstance(_value))
 			{

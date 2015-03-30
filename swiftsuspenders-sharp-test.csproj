@@ -99,10 +99,11 @@
     <Compile Include="test\swiftsuspenders\DependencyProviderTests.cs" />
     <Compile Include="test\swiftsuspenders\support\types\ClazzExtension.cs" />
     <Compile Include="test\swiftsuspenders\support\injectees\MultipleConstructorInjectee.cs" />
+    <Compile Include="test\swiftsuspenders\support\injectees\OptionalConstructorInjectee.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="swiftsuspenders-sharp.csproj">
-      <Project>{45F8FEAB-D2ED-45CF-94C5-AE130F9BBDF5}</Project>
+      <Project>{05CC2A48-EC5B-46EB-AC3F-8BDD870160D4}</Project>
       <Name>swiftsuspenders-sharp</Name>
     </ProjectReference>
   </ItemGroup>
