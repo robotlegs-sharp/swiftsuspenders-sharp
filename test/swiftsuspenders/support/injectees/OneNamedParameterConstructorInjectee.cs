@@ -1,8 +1,8 @@
 ﻿using System;
-using swiftsuspenders.support.types;
-using swiftsuspenders.support.enums;
+using SwiftSuspenders.Support.Types;
+using SwiftSuspenders.Support.Enums;
 
-namespace swiftsuspenders.support.injectees
+namespace SwiftSuspenders.Support.Injectees
 {
 	public class OneNamedParameterConstructorInjectee
 	{

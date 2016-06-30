@@ -1,6 +1,6 @@
-﻿using swiftsuspenders.support.types;
+﻿using SwiftSuspenders.Support.Types;
 
-namespace swiftsuspenders.support.injectees
+namespace SwiftSuspenders.Support.Injectees
 {
 	public class OptionalConstructorInjectee
 	{

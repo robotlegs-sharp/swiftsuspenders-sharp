@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace swiftsuspenders.support.enums
+namespace SwiftSuspenders.Support.Enums
 {
 	public enum InjectEnum
 	{

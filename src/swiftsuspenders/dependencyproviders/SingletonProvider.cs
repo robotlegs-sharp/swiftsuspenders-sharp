@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using swiftsuspenders.errors;
+using SwiftSuspenders.Errors;
 
-namespace swiftsuspenders.dependencyproviders
+namespace SwiftSuspenders.DependencyProviders
 {
 	public class SingletonProvider : DependencyProvider
 	{

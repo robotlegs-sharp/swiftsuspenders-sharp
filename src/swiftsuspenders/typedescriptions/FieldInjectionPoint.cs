@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
-using swiftsuspenders.dependencyproviders;
-using swiftsuspenders.errors;
-using swiftsuspenders.mapping;
+using SwiftSuspenders.DependencyProviders;
+using SwiftSuspenders.Errors;
+using SwiftSuspenders.Mapping;
 
-namespace swiftsuspenders.typedescriptions
+namespace SwiftSuspenders.TypeDescriptions
 {
 	public class FieldInjectionPoint : InjectionPoint
 	{

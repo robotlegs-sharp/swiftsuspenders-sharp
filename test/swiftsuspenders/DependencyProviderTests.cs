@@ -1,14 +1,14 @@
 ﻿using System;
-using swiftsuspenders;
+using SwiftSuspenders;
 using NUnit.Framework;
-using swiftsuspenders.support.types;
-using swiftsuspenders.dependencyproviders;
-using swiftsuspenders.errors;
-using swiftsuspenders.support.providers;
-using swiftsuspenders.mapping;
-using swiftsuspenders.support.injectees;
+using SwiftSuspenders.Support.Types;
+using SwiftSuspenders.DependencyProviders;
+using SwiftSuspenders.Errors;
+using SwiftSuspenders.Support.providers;
+using SwiftSuspenders.Mapping;
+using SwiftSuspenders.Support.Injectees;
 
-namespace swiftsuspenders
+namespace SwiftSuspenders
 {
 	[TestFixture]
 	public class DependencyProviderTests

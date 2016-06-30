@@ -1,13 +1,13 @@
 ﻿using System;
-using swiftsuspenders.typedescriptions;
+using SwiftSuspenders.TypeDescriptions;
 using System.Collections.Generic;
 using System.Reflection;
-using swiftsuspenders.dependencyproviders;
-using swiftsuspenders;
-using swiftsuspenders.errors;
-using swiftsuspenders.mapping;
+using SwiftSuspenders.DependencyProviders;
+using SwiftSuspenders;
+using SwiftSuspenders.Errors;
+using SwiftSuspenders.Mapping;
 
-namespace swiftsuspenders.typedescriptions
+namespace SwiftSuspenders.TypeDescriptions
 {
 	public abstract class MethodBaseInjectionPoint : InjectionPoint
 	{

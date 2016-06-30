@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace swiftsuspenders.support.injectees
+namespace SwiftSuspenders.Support.Injectees
 {
 	public class OrderedPreDestroyInjectee
 	{

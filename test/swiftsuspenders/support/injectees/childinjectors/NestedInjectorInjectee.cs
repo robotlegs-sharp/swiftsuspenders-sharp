@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace swiftsuspenders.support.injectees.childinjectors
+namespace SwiftSuspenders.Support.Injectees.childinjectors
 {
 	public class NestedInjectorInjectee
 	{

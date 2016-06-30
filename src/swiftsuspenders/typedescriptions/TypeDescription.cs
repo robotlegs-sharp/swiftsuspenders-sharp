@@ -1,9 +1,9 @@
 ﻿using System;
-using swiftsuspenders.errors;
+using SwiftSuspenders.Errors;
 using System.Reflection;
-using swiftsuspenders.mapping;
+using SwiftSuspenders.Mapping;
 
-namespace swiftsuspenders.typedescriptions
+namespace SwiftSuspenders.TypeDescriptions
 {
 	public class TypeDescription
 	{

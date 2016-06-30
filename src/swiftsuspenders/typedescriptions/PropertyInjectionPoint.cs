@@ -1,12 +1,12 @@
 ﻿using System;
-using swiftsuspenders.typedescriptions;
+using SwiftSuspenders.TypeDescriptions;
 using System.Reflection;
-using swiftsuspenders;
-using swiftsuspenders.dependencyproviders;
-using swiftsuspenders.errors;
-using swiftsuspenders.mapping;
+using SwiftSuspenders;
+using SwiftSuspenders.DependencyProviders;
+using SwiftSuspenders.Errors;
+using SwiftSuspenders.Mapping;
 
-namespace swiftsuspenders.typedescriptions
+namespace SwiftSuspenders.TypeDescriptions
 {
 	public class PropertyInjectionPoint : InjectionPoint
 	{

@@ -1,17 +1,17 @@
 ﻿using System;
 using NUnit.Framework;
-using swiftsuspenders;
-using swiftsuspenders.reflector;
-using swiftsuspenders.typedescriptions;
-using swiftsuspenders.support.types;
-using swiftsuspenders.support.injectees;
-using swiftsuspenders.support.enums;
+using SwiftSuspenders;
+using SwiftSuspenders.Reflector;
+using SwiftSuspenders.TypeDescriptions;
+using SwiftSuspenders.Support.Types;
+using SwiftSuspenders.Support.Injectees;
+using SwiftSuspenders.Support.Enums;
 
-namespace swiftsuspenders
+namespace SwiftSuspenders
 {
 	public abstract class ReflectorTests
 	{
-		protected Reflector reflector;
+		protected SwiftSuspenders.Reflector.Reflector reflector;
 		protected Injector injector;
 
 		[Test]

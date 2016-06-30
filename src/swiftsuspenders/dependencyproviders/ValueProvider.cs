@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace swiftsuspenders.dependencyproviders
+namespace SwiftSuspenders.DependencyProviders
 {
 	public class ValueProvider : DependencyProvider
 	{

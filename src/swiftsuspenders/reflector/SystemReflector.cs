@@ -1,11 +1,11 @@
 ﻿using System;
-using swiftsuspenders.typedescriptions;
+using SwiftSuspenders.TypeDescriptions;
 using System.Reflection;
 using System.Collections.Generic;
-using swiftsuspenders.errors;
-using swiftsuspenders.mapping;
+using SwiftSuspenders.Errors;
+using SwiftSuspenders.Mapping;
 
-namespace swiftsuspenders.reflector
+namespace SwiftSuspenders.Reflector
 {
 	public class SystemReflector : Reflector
 	{

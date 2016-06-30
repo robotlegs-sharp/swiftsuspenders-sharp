@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using swiftsuspenders.typedescriptions;
-using swiftsuspenders.reflector;
+using SwiftSuspenders.TypeDescriptions;
+using SwiftSuspenders.Reflector;
 
-namespace swiftsuspenders.utils
+namespace SwiftSuspenders.Utils
 {
 	public class TypeDescriptor
 	{
 		private Dictionary<Type, TypeDescription> _descriptionsCache;
-		private Reflector _reflector;
+		private SwiftSuspenders.Reflector.Reflector _reflector;
 
-		public TypeDescriptor (Reflector reflector, Dictionary<Type, TypeDescription> descriptionsCache)
+		public TypeDescriptor (SwiftSuspenders.Reflector.Reflector reflector, Dictionary<Type, TypeDescription> descriptionsCache)
 		{
 			_descriptionsCache = descriptionsCache;
 			_reflector = reflector;

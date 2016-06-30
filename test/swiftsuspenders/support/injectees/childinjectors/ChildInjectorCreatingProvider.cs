@@ -1,7 +1,7 @@
 ﻿using System;
-using swiftsuspenders.dependencyproviders;
+using SwiftSuspenders.DependencyProviders;
 
-namespace swiftsuspenders.support.injectees.childinjectors
+namespace SwiftSuspenders.Support.Injectees.childinjectors
 {
 	public class ChildInjectorCreatingProvider : DependencyProvider
 	{

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace swiftsuspenders.dependencyproviders
+namespace SwiftSuspenders.DependencyProviders
 {
 	public interface FallbackDependencyProvider : DependencyProvider
 	{

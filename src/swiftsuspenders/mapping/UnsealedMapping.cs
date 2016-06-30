@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace swiftsuspenders.mapping
+namespace SwiftSuspenders.Mapping
 {
 	public interface UnsealedMapping
 	{

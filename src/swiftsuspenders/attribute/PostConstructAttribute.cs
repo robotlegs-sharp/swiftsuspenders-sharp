@@ -1,5 +1,5 @@
 ﻿using System;
-using swiftsuspenders;
+using SwiftSuspenders;
 
 public class PostConstruct: OrderedMethodAttribute
 {

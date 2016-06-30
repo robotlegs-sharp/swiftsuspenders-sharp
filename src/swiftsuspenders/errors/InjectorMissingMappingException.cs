@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace swiftsuspenders.errors
+namespace SwiftSuspenders.Errors
 {
 	public class InjectorMissingMappingException : InjectorException
 	{

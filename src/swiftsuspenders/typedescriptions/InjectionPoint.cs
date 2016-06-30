@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace swiftsuspenders.typedescriptions
+namespace SwiftSuspenders.TypeDescriptions
 {
 	public class InjectionPoint
 	{

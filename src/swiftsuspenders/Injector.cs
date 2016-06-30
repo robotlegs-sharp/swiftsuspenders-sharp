@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using swiftsuspenders.mapping;
-using swiftsuspenders.errors;
-using swiftsuspenders.dependencyproviders;
-using swiftsuspenders.reflector;
-using swiftsuspenders.utils;
-using swiftsuspenders.typedescriptions;
+using SwiftSuspenders.Mapping;
+using SwiftSuspenders.Errors;
+using SwiftSuspenders.DependencyProviders;
+using SwiftSuspenders.Reflector;
+using SwiftSuspenders.Utils;
+using SwiftSuspenders.TypeDescriptions;
 
-namespace swiftsuspenders
+namespace SwiftSuspenders
 {
 	public class Injector
 	{
@@ -207,7 +207,7 @@ namespace swiftsuspenders
 
 		private Dictionary<object, object> _managedObjects = new Dictionary<object, object>();
 
-		private Reflector _reflector;
+		private SwiftSuspenders.Reflector.Reflector _reflector;
 
 		private FallbackDependencyProvider _fallbackProvider;
 
@@ -330,7 +330,7 @@ namespace swiftsuspenders
 		{
 			MappingId mappingId = new MappingId (type, key);
 			InjectionMapping mapping;
-			if (_mappings.TryGetValue(mappingId, out mapping)) 
+			if (!_mappings.TryGetValue(mappingId, out mapping)) 
 			{
 				throw new InjectorMissingMappingException("Error while retrieving an injector mapping: "
 					+ "No mapping defined for dependency " + mappingId);

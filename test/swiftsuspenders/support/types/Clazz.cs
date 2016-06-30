@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace swiftsuspenders.support.types
+namespace SwiftSuspenders.Support.Types
 {
 	public class Clazz: Interface, Interface2
 	{

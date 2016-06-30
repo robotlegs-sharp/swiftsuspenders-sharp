@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using swiftsuspenders.support.injectees;
-using swiftsuspenders.support.types;
-using swiftsuspenders.support.enums;
-using swiftsuspenders.errors;
-using swiftsuspenders.support.providers;
-using swiftsuspenders.typedescriptions;
-using swiftsuspenders.mapping;
-using swiftsuspenders.dependencyproviders;
+using SwiftSuspenders.Support.Injectees;
+using SwiftSuspenders.Support.Types;
+using SwiftSuspenders.Support.Enums;
+using SwiftSuspenders.Errors;
+using SwiftSuspenders.Support.providers;
+using SwiftSuspenders.TypeDescriptions;
+using SwiftSuspenders.Mapping;
+using SwiftSuspenders.DependencyProviders;
 
-namespace swiftsuspenders
+namespace SwiftSuspenders
 {
 	[TestFixture]
 	public class InjectorTests

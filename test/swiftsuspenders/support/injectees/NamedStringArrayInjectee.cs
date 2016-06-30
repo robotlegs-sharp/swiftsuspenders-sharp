@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace swiftsuspenders.support.injectees
+namespace SwiftSuspenders.Support.Injectees
 {
 	public class NamedStringArrayInjectee
 	{

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
-using swiftsuspenders.dependencyproviders;
-using swiftsuspenders.errors;
+using SwiftSuspenders.DependencyProviders;
+using SwiftSuspenders.Errors;
 
-namespace swiftsuspenders.typedescriptions
+namespace SwiftSuspenders.TypeDescriptions
 {
 	public class ConstructorInjectionPoint : MethodBaseInjectionPoint
 	{

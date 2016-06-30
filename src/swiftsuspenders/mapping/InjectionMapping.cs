@@ -1,8 +1,8 @@
 ﻿using System;
-using swiftsuspenders.errors;
-using swiftsuspenders.dependencyproviders;
+using SwiftSuspenders.Errors;
+using SwiftSuspenders.DependencyProviders;
 
-namespace swiftsuspenders.mapping
+namespace SwiftSuspenders.Mapping
 {
 	public class InjectionMapping : ProviderlessMapping, UnsealedMapping
 	{

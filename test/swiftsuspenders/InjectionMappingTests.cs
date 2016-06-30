@@ -1,13 +1,13 @@
 ﻿using System;
 using NUnit.Framework;
-using swiftsuspenders.mapping;
-using swiftsuspenders.support.types;
-using swiftsuspenders.dependencyproviders;
+using SwiftSuspenders.Mapping;
+using SwiftSuspenders.Support.Types;
+using SwiftSuspenders.DependencyProviders;
 using System.Reflection;
 using System.Collections.Generic;
-using swiftsuspenders.errors;
+using SwiftSuspenders.Errors;
 
-namespace swiftsuspenders
+namespace SwiftSuspenders
 {
 	[TestFixture]
 	public class InjectionMappingTests
@@ -188,6 +188,16 @@ namespace swiftsuspenders
 			injector.Map(typeof(Interface)).ToValue(null);
 			object instance = injector.GetInstance(typeof(Interface));
 			Assert.Null (instance);
+		}
+
+		[Test]
+		public void GetMappingReturnsMappingsOfTheSameKey()
+		{
+			InjectionMapping injectionMapping1 = injector.Map (typeof(Interface));
+			injectionMapping1.ToValue(null);
+
+			InjectionMapping injectionMapping2 = injector.GetMapping (typeof(Interface));
+			Assert.That (injectionMapping1, Is.EqualTo (injectionMapping2));
 		}
 	}
 }

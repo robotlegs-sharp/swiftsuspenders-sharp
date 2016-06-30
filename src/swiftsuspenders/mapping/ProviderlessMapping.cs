@@ -1,7 +1,7 @@
 ﻿using System;
-using swiftsuspenders.dependencyproviders;
+using SwiftSuspenders.DependencyProviders;
 
-namespace swiftsuspenders.mapping
+namespace SwiftSuspenders.Mapping
 {
 	public interface ProviderlessMapping
 	{

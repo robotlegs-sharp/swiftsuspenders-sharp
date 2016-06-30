@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
-using swiftsuspenders.reflector;
-using swiftsuspenders;
+using SwiftSuspenders.Reflector;
+using SwiftSuspenders;
 
-namespace swiftsuspenders
+namespace SwiftSuspenders
 {
 	[TestFixture]
 	public class SystemReflectorTests : ReflectorTests

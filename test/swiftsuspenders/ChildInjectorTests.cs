@@ -1,12 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
-using swiftsuspenders.support.injectees.childinjectors;
-using swiftsuspenders.mapping;
-using swiftsuspenders.support.types;
-using swiftsuspenders.support.injectees;
-using swiftsuspenders.support.providers;
+using SwiftSuspenders.Support.Injectees.childinjectors;
+using SwiftSuspenders.Mapping;
+using SwiftSuspenders.Support.Types;
+using SwiftSuspenders.Support.Injectees;
+using SwiftSuspenders.Support.providers;
 
-namespace swiftsuspenders
+namespace SwiftSuspenders
 {
 	[TestFixture]
 	public class ChildInjectorTests

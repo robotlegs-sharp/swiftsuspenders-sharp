@@ -1,7 +1,7 @@
 ﻿using System;
-using swiftsuspenders.typedescriptions;
+using SwiftSuspenders.TypeDescriptions;
 
-namespace swiftsuspenders.reflector
+namespace SwiftSuspenders.Reflector
 {
 	public interface Reflector
 	{

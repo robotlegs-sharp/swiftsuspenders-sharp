@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace swiftsuspenders
+namespace SwiftSuspenders
 {
 	[AttributeUsage(AttributeTargets.Method, 
 		AllowMultiple = false,

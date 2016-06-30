@@ -1,10 +1,10 @@
 ﻿using System;
-using swiftsuspenders.dependencyproviders;
-using swiftsuspenders.support.types;
-using swiftsuspenders;
+using SwiftSuspenders.DependencyProviders;
+using SwiftSuspenders.Support.Types;
+using SwiftSuspenders;
 using System.Collections.Generic;
 
-namespace swiftsuspenders.support.providers
+namespace SwiftSuspenders.Support.providers
 {
 	public class MoodyProvider : FallbackDependencyProvider
 	{

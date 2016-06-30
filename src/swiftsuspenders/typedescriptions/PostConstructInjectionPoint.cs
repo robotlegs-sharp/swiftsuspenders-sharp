@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace swiftsuspenders.typedescriptions
+namespace SwiftSuspenders.TypeDescriptions
 {
 	public class PostConstructInjectionPoint : OrderedInjectionPoint
 	{
