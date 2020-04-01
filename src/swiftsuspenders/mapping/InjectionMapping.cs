@@ -77,7 +77,7 @@ namespace SwiftSuspenders.Mapping
 
 		public UnsealedMapping ToSingleton<T>(bool initializeImmediately = false)
 		{
-			return ToSingleton (typeof(T));
+			return ToSingleton (typeof(T), initializeImmediately);
 		}
 
 		public UnsealedMapping ToSingleton(Type type, bool initializeImmediately = false)
